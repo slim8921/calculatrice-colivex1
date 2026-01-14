@@ -1,1 +1,147 @@
-# calculatrice-colivex1
+# calculatrice-colivex1[Calculatrice_Colivex_Web_Mobile_Rouge_Bleu_Logo.html](https://github.com/user-attachments/files/24622478/Calculatrice_Colivex_Web_Mobile_Rouge_Bleu_Logo.html)
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculatrice Déménagement – Transport Colivex</title>
+<style>
+body { font-family: Arial, sans-serif; background:#eef2f7; margin:0; padding:20px; }
+.container { max-width:440px; margin:auto; background:#ffffff; padding:20px; border-radius:14px; box-shadow:0 6px 14px rgba(0,0,0,.12); border-top:6px solid #c1121f; }
+.header { text-align:center; margin-bottom:10px; }
+.logo {
+  font-size:22px;
+  font-weight:bold;
+  color:#1f4e79;
+}
+.logo span { color:#c1121f; }
+.subtitle { font-size:13px; color:#555; }
+
+label { font-weight:bold; margin-top:12px; display:block; color:#1f4e79; }
+input, select { width:100%; padding:10px; font-size:16px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
+button { width:100%; padding:14px; font-size:18px; background:#c1121f; color:#fff; border:none; border-radius:10px; margin-top:20px; }
+button:hover { background:#a50f19; }
+.toggle { background:#1f4e79; color:#fff; padding:12px; border-radius:10px; font-weight:bold; margin-top:15px; cursor:pointer; text-align:center; }
+.extras { display:none; margin-top:10px; }
+
+.result { margin-top:20px; padding:15px; background:#f1f7ff; border-radius:10px; font-size:16px; border-left:5px solid #1f4e79; }
+.total { font-size:18px; font-weight:bold; color:#c1121f; margin-top:8px; }
+.line { display:flex; justify-content:space-between; gap:12px; }
+
+.small { font-size:12px; color:#555; margin-top:10px; text-align:center; }
+hr { border:none; border-top:1px solid #ddd; margin:16px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="logo">Transport <span>Colivex</span></div>
+  <div class="subtitle">Calculatrice terrain – avant contrat</div>
+</div>
+
+<label>Tarif horaire ($)</label>
+<input type="number" id="rate" value="155">
+
+<label>Heures travaillées</label>
+<input type="number" id="hours" value="3">
+
+<label>Minimum d'heures</label>
+<input type="number" id="minHours" value="3">
+
+<label>Transport (heures)</label>
+<input type="number" id="travel" value="1">
+
+<div class="toggle" onclick="toggleExtras()">➕ AJOUTER DES EXTRAS</div>
+
+<div class="extras" id="extras">
+  <label>Sac à matelas (10 $)</label>
+  <select id="mattress"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+
+  <label>Ruban / Tape (2,50 $)</label>
+  <select id="tape"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+
+  <label>Boîte garde-robe (20 $)</label>
+  <select id="wardrobe"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+
+  <label>Boîte TV (50 $)</label>
+  <select id="tvbox"><option>0</option><option>1</option><option>2</option></select>
+
+  <label>Autre extra ($)</label>
+  <input type="number" id="other" value="0">
+</div>
+
+<label>Dépôt payé (tx incl.)</label>
+<input type="number" id="deposit" value="250">
+
+<button onclick="calculer()">CALCULER</button>
+
+<div class="result" id="result"></div>
+
+<div class="small">
+Heures facturées = max(heures, minimum + transport)<br>
+TPS 5 % • TVQ 9,975 % • Dépôt taxes incluses
+</div>
+
+</div>
+
+<script>
+function toggleExtras() {
+  const ex = document.getElementById("extras");
+  ex.style.display = ex.style.display === "none" || ex.style.display === "" ? "block" : "none";
+}
+function money(x){ return "$" + (x||0).toFixed(2); }
+
+function calculer() {
+  const rate = +rateEl.value || 0;
+  const hours = +hoursEl.value || 0;
+  const minHours = +minHoursEl.value || 0;
+  const travel = +travelEl.value || 0;
+
+  const mattress = +mattressEl.value || 0;
+  const tape = +tapeEl.value || 0;
+  const wardrobe = +wardrobeEl.value || 0;
+  const tvbox = +tvboxEl.value || 0;
+  const other = +otherEl.value || 0;
+
+  const deposit = +depositEl.value || 0;
+
+  const TPS = 0.05, TVQ = 0.09975;
+
+  const billableHours = Math.max(hours, minHours + travel);
+  const labor = billableHours * rate;
+  const extras = mattress*10 + tape*2.5 + wardrobe*20 + tvbox*50 + other;
+
+  const subTotal = labor + extras;
+  const tps = subTotal * TPS;
+  const tvq = subTotal * TVQ;
+  const total = subTotal + tps + tvq;
+  const solde = Math.max(0, total - deposit);
+
+  result.innerHTML =
+    "<div class='line'><b>Heures facturées</b><span>"+billableHours+"</span></div>"+
+    "<div class='line'><b>Main-d'œuvre</b><span>"+money(labor)+"</span></div>"+
+    "<div class='line'><b>Extras</b><span>"+money(extras)+"</span></div>"+
+    "<div class='line'><b>Sous-total</b><span>"+money(subTotal)+"</span></div>"+
+    "<div class='line'><b>TPS</b><span>"+money(tps)+"</span></div>"+
+    "<div class='line'><b>TVQ</b><span>"+money(tvq)+"</span></div>"+
+    "<hr>"+
+    "<div class='line total'><b>TOTAL (tx incl.)</b><span>"+money(total)+"</span></div>"+
+    "<div class='line'><b>Dépôt</b><span>-"+money(deposit)+"</span></div>"+
+    "<div class='line total'><b>SOLDE À PAYER</b><span>"+money(solde)+"</span></div>";
+}
+
+const rateEl = document.getElementById("rate");
+const hoursEl = document.getElementById("hours");
+const minHoursEl = document.getElementById("minHours");
+const travelEl = document.getElementById("travel");
+const mattressEl = document.getElementById("mattress");
+const tapeEl = document.getElementById("tape");
+const wardrobeEl = document.getElementById("wardrobe");
+const tvboxEl = document.getElementById("tvbox");
+const otherEl = document.getElementById("other");
+const depositEl = document.getElementById("deposit");
+const result = document.getElementById("result");
+</script>
+</body>
+</html>
