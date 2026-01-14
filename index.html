@@ -279,8 +279,38 @@ Dépôt soustrait (taxes incluses).
 const MIN_TRAVAIL_H = 3; // ✅ Minimum bloqué: 3h de travail
 const TPS = 0.05;
 const TVQ = 0.09975;
+<div class="result">
+<div class="line">
+<span>Sous-total (avant taxes)</span>
+<strong id="subtotalTxt">0.00 $</strong>
+</div>
 
-// ====== UI / TOGGLE EXTRAS ======
+<div class="line">
+<span>Taxes (TPS + TVQ)</span>
+<strong id="taxesTxt">0.00 $</strong>
+</div>
+
+<div class="line total">
+<span>Total (taxes incluses)</span>
+<strong id="totalTaxesInclusesTxt">0.00 $</strong>
+</div>
+
+<div class="line">
+<span>Dépôt reçu (− 250 $)</span>
+<strong id="depotTxt">0.00 $</strong>
+</div>
+
+<hr>
+
+<div class="line total">
+<span>Grand total à payer</span>
+<strong id="grandTotalTxt">0.00 $</strong>
+</div>
+
+<small>
+Formule : <b>Sous-total + taxes = Total</b>, puis <b>Total − dépôt = Grand total</b>.
+</small>
+</div>// ====== UI / TOGGLE EXTRAS ======
 const toggleExtrasBtn = document.getElementById("toggleExtras");
 const extrasBox = document.getElementById("extrasBox");
 toggleExtrasBtn.addEventListener("click", () => {
