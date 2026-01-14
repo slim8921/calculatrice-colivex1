@@ -446,10 +446,11 @@ const depot = parseFloat(depotMode.value || "0");
 total = total - depot;
 
 // UI
-subtotalTxt.textContent = sousTotal.toFixed(2) + " $";
-tpsTxt.textContent = tps.toFixed(2) + " $";
-tvqTxt.textContent = tvq.toFixed(2) + " $";
-totalTxt.textContent = total.toFixed(2) + " $";
+subtotalTxt.textContent = sousTotalAvantTaxes.toFixed(2) + " $";
+taxesTxt.textContent = (tps + tvq).toFixed(2) + " $";
+totalTaxesInclusesTxt.textContent = totalAvecTaxes.toFixed(2) + " $";
+depotTxt.textContent = ("- " + depot.toFixed(2) + " $");
+grandTotalTxt.textContent = grandTotal.toFixed(2) + " $";
 }
 
 // Init affichage transport + calc total initial
