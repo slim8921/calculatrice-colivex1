@@ -74,14 +74,10 @@ Salim Bentriou <info@transportcolivex.com>
 <span>Heures facturables (travail + transport)</span>
 <strong id="heuresFacturables">0.00 h</strong>
 </div><!-- Heures -->
-<label>Heure d’arrivée</label>
-<input type="time" id="heureArrivee">
 
-<label>Heure de départ</label>
-<input type="time" id="heureDepart">
 
 <label>Frais de transport (heures)</label>
-<select id="transportHeures">
+
 <option value="0">0 h</option>
 <option value="0.5">0.5 h</option>
 <option value="1" selected>1 h</option>
@@ -138,62 +134,53 @@ TPS 5 % • TVQ 9,975 % • Dépôt taxes incluses
 </div>
 
 <script>
-function toggleExtras() {
-  const ex = document.getElementById("extras");
-  ex.style.display = ex.style.display === "none" || ex.style.display === "" ? "block" : "none";
-}
-function money(x){ return "$" + (x||0).toFixed(2); }
+const arrivee = document.getElementById("heureArrivee");
+const depart = document.getElementById("heureDepart");
+const transport = document.getElementById("transportHeures");
 
-function calculer() {
-  const rate = +rateEl.value || 0;
-  const hours = +hoursEl.value || 0;
-  const minHours = +minHoursEl.value || 0;
-  const travel = +travelEl.value || 0;
+// Affichages (TES ids)
+const outTravail = document.getElementById("heuresTravail");
+const outFact = document.getElementById("heuresFacturables");
 
-  const mattress = +mattressEl.value || 0;
-  const tape = +tapeEl.value || 0;
-  const wardrobe = +wardrobeEl.value || 0;
-  const tvbox = +tvboxEl.value || 0;
-  const other = +otherEl.value || 0;
+// ✅ IMPORTANT: mets ici l'id du champ où tu entres "Heures travaillées" (le input 3)
+const champHeuresInput = document.getElementById("heures"); // <- change si besoin
 
-  const deposit = +depositEl.value || 0;
-
-  const TPS = 0.05, TVQ = 0.09975;
-
-  const billableHours = Math.max(hours, minHours + travel);
-  const labor = billableHours * rate;
-  const extras = mattress*10 + tape*2.5 + wardrobe*20 + tvbox*50 + other;
-
-  const subTotal = labor + extras;
-  const tps = subTotal * TPS;
-  const tvq = subTotal * TVQ;
-  const total = subTotal + tps + tvq;
-  const solde = Math.max(0, total - deposit);
-
-  result.innerHTML =
-    "<div class='line'><b>Heures facturées</b><span>"+billableHours+"</span></div>"+
-    "<div class='line'><b>Main-d'œuvre</b><span>"+money(labor)+"</span></div>"+
-    "<div class='line'><b>Extras</b><span>"+money(extras)+"</span></div>"+
-    "<div class='line'><b>Sous-total</b><span>"+money(subTotal)+"</span></div>"+
-    "<div class='line'><b>TPS</b><span>"+money(tps)+"</span></div>"+
-    "<div class='line'><b>TVQ</b><span>"+money(tvq)+"</span></div>"+
-    "<hr>"+
-    "<div class='line total'><b>TOTAL (tx incl.)</b><span>"+money(total)+"</span></div>"+
-    "<div class='line'><b>Dépôt</b><span>-"+money(deposit)+"</span></div>"+
-    "<div class='line total'><b>SOLDE À PAYER</b><span>"+money(solde)+"</span></div>";
+function timeToMinutes(t) {
+if (!t) return null;
+const [h, m] = t.split(":").map(Number);
+return h * 60 + m;
 }
 
-const rateEl = document.getElementById("rate");
-const hoursEl = document.getElementById("hours");
-const minHoursEl = document.getElementById("minHours");
-const travelEl = document.getElementById("travel");
-const mattressEl = document.getElementById("mattress");
-const tapeEl = document.getElementById("tape");
-const wardrobeEl = document.getElementById("wardrobe");
-const tvboxEl = document.getElementById("tvbox");
-const otherEl = document.getElementById("other");
-const depositEl = document.getElementById("deposit");
-const result = document.getElementById("result");
-</script>
+function roundQuarter(h) {
+return Math.round(h * 4) / 4; // quart d'heure
+}
+
+function calculHeuresAuto() {
+const a = timeToMinutes(arrivee.value);
+const d = timeToMinutes(depart.value);
+
+if (a === null || d === null) return;
+
+let minutes = d - a;
+if (minutes < 0) minutes += 1440; // passe minuit
+
+const heuresTravail = roundQuarter(minutes / 60);
+const hTransport = parseFloat(transport.value || "0");
+const heuresFact = heuresTravail + hTransport;
+
+// Affichage
+if (outTravail) outTravail.textContent = heuresTravail.toFixed(2) + " h";
+if (outFact) outFact.textContent = heuresFact.toFixed(2) + " h";
+
+// Remplit le champ heures utilisé pour le total $
+if (champHeuresInput) champHeuresInput.value = heuresFact.toFixed(2);
+
+// Relance ton calcul total si la fonction existe
+if (typeof calculerTotal === "function") calculerTotal();
+}
+
+arrivee.addEventListener("change", calculHeuresAuto);
+depart.addEventListener("change", calculHeuresAuto);
+transport.addEventListener("change", calculHeuresAuto);</script>
 </body>
 </html>
