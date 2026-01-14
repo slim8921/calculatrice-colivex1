@@ -172,15 +172,6 @@ function calculer() {
   const total = sousTotal + tps + tvq;
   const aPayer = total - depot;
 
-  document.getElementById("hTravail").textContent = heuresTravail.toFixed(2) + " h";
-  document.getElementById("hFacturable").textContent = heuresFacturables.toFixed(2) + " h";
-  document.getElementById("sousTotal").textContent = sousTotal.toFixed(2) + " $";
-  document.getElementById("tps").textContent = tps.toFixed(2) + " $";
-  document.getElementById("tvq").textContent = tvq.toFixed(2) + " $";
-  document.getElementById("total").textContent = total.toFixed(2) + " $";
-  document.getElementById("depotTxt").textContent = depot ? "-" + depot.toFixed(2) + " $" : "0.00 $";
-  document.getElementById("aPayer").textContent = aPayer.toFixed(2) + " $";
-}
 </script>
 
 </body>
