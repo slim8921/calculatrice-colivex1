@@ -3,23 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculatrice Colivex – Extras multiples</title>
+<title>Calculatrice Colivex</title>
 
 <style>
-body{font-family:Arial;background:#eef2f7;margin:0;padding:18px}
+body{font-family:Arial;background:#eef2f7;margin:0;padding:16px}
 .container{max-width:520px;margin:auto;background:#fff;padding:18px;border-radius:14px;border-top:6px solid #c1121f}
 h1{text-align:center;color:#1f4e79;margin:0}
 h1 span{color:#c1121f}
-label{font-weight:700;margin-top:12px;display:block}
+label{font-weight:700;margin-top:14px;display:block}
 input,select,button{width:100%;padding:12px;margin-top:6px;font-size:16px;border-radius:10px;border:1px solid #ccc}
 button{background:#c1121f;color:#fff;font-weight:800;border:none;margin-top:18px}
+.cart{margin-top:14px;background:#f7f9fc;border-radius:12px;padding:12px}
+.cart h3{margin:0 0 8px 0}
+.item{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
+.qty{display:flex;gap:6px;align-items:center}
+.qty button{width:34px;height:34px;padding:0;font-size:18px}
 .result{margin-top:18px;background:#f7f9fc;padding:14px;border-radius:12px;border-left:6px solid #1f4e79}
-.line{display:flex;justify-content:space-between;margin:8px 0}
+.line{display:flex;justify-content:space-between;margin:6px 0}
 .total{font-weight:900;font-size:18px}
-.extras{margin-top:12px;border:1px dashed #c7cedb;border-radius:12px;padding:12px;background:#f8fbff}
-.extraRow{display:grid;grid-template-columns:1fr 90px 90px;gap:8px;align-items:center;margin:6px 0}
-.extraRow input[type="number"]{padding:8px}
-.small{font-size:12px;color:#666}
 </style>
 </head>
 
@@ -28,161 +29,137 @@ button{background:#c1121f;color:#fff;font-weight:800;border:none;margin-top:18px
 <h1>Transport <span>Colivex</span></h1>
 
 <label>Tarif horaire ($)</label>
-<input id="taux" type="number" value="155">
+<input id="rate" type="number" value="155">
 
 <label>Heure d’arrivée</label>
-<input id="arrivee" type="time">
+<input id="start" type="time">
 
 <label>Heure de départ</label>
-<input id="depart" type="time">
+<input id="end" type="time">
 
 <label>Frais transport (heures)</label>
 <select id="transport">
-  <option value="0">0 h</option>
-  <option value="0.5">0.5 h</option>
   <option value="1" selected>1 h</option>
   <option value="1.5">1.5 h</option>
   <option value="2">2 h</option>
 </select>
 
-<!-- EXTRAS MULTIPLES -->
-<div class="extras">
-  <strong>Extras (plusieurs possibles)</strong>
-  <div class="extraRow">
-    <label><input type="checkbox" class="extraChk" data-price="10"> Sac à matelas</label>
-    <input type="number" class="extraQty" value="1" min="1">
-    <span>10 $</span>
-  </div>
-  <div class="extraRow">
-    <label><input type="checkbox" class="extraChk" data-price="2.5"> Tape</label>
-    <input type="number" class="extraQty" value="1" min="1">
-    <span>2.50 $</span>
-  </div>
-  <div class="extraRow">
-    <label><input type="checkbox" class="extraChk" data-price="20"> Boîte garde-robe</label>
-    <input type="number" class="extraQty" value="1" min="1">
-    <span>20 $</span>
-  </div>
-  <div class="extraRow">
-    <label><input type="checkbox" class="extraChk" data-price="50"> Boîte TV</label>
-    <input type="number" class="extraQty" value="1" min="1">
-    <span>50 $</span>
-  </div>
-  <div class="extraRow">
-    <label>Autre extra ($)</label>
-    <input type="number" id="extraAutre" value="0" min="0" step="0.01">
-    <span></span>
-  </div>
-  <div class="line small"><span>Total extras</span><strong id="extrasTotal">0.00 $</strong></div>
+<div class="cart">
+<h3>Extras (panier)</h3>
+
+<div class="item">
+<span>Sac à matelas (10 $)</span>
+<div class="qty">
+<button onclick="chg('mat',-1)">−</button>
+<span id="mat">0</span>
+<button onclick="chg('mat',1)">+</button>
+</div>
+</div>
+
+<div class="item">
+<span>Tape (2.50 $)</span>
+<div class="qty">
+<button onclick="chg('tape',-1)">−</button>
+<span id="tape">0</span>
+<button onclick="chg('tape',1)">+</button>
+</div>
+</div>
+
+<div class="item">
+<span>Boîte garde-robe (20 $)</span>
+<div class="qty">
+<button onclick="chg('robe',-1)">−</button>
+<span id="robe">0</span>
+<button onclick="chg('robe',1)">+</button>
+</div>
+</div>
+
+<div class="item">
+<span>Boîte TV (50 $)</span>
+<div class="qty">
+<button onclick="chg('tv',-1)">−</button>
+<span id="tv">0</span>
+<button onclick="chg('tv',1)">+</button>
+</div>
+</div>
 </div>
 
 <label>Taxes</label>
-<select id="taxes">
-  <option value="on" selected>Avec taxes</option>
-  <option value="off">Sans taxes</option>
+<select id="tax">
+<option value="on" selected>Avec taxes</option>
+<option value="off">Sans taxes</option>
 </select>
 
-<label>Dépôt (taxes incluses)</label>
-<select id="depot">
-  <option value="0">Aucun dépôt</option>
-  <option value="250" selected>250 $</option>
+<label>Dépôt reçu (taxes incluses)</label>
+<select id="deposit">
+<option value="0">Aucun</option>
+<option value="250" selected>250 $</option>
 </select>
 
-<button onclick="calculer()">Calculer</button>
+<button onclick="calc()">Calculer</button>
 
-<div class="result" id="result" style="display:none">
-  <div class="line"><span>Heures travaillées (15 min)</span><strong id="hTrav">0.00 h</strong></div>
-  <div class="line"><span>Heures facturables</span><strong id="hFact">0.00 h</strong></div>
-
-  <hr>
-
-  <div class="line"><span>Sous-total</span><strong id="sub">0.00 $</strong></div>
-  <div class="line"><span>Extras</span><strong id="extraTxt">0.00 $</strong></div>
-  <div class="line"><span>TPS (5 %)</span><strong id="tps">0.00 $</strong></div>
-  <div class="line"><span>TVQ (9.975 %)</span><strong id="tvq">0.00 $</strong></div>
-
-  <div class="line total"><span>Total taxes incluses</span><strong id="total">0.00 $</strong></div>
-  <div class="line"><span>Dépôt reçu</span><strong id="depTxt">-0.00 $</strong></div>
-  <div class="line total"><span>Grand total à payer</span><strong id="grand">0.00 $</strong></div>
+<div class="result" id="res" style="display:none">
+<div class="line"><span>Heures travaillées</span><strong id="worked">0.00 h</strong></div>
+<div class="line"><span>Heures facturables</span><strong id="billable">0.00 h</strong></div>
+<hr>
+<div class="line"><span>Main-d’œuvre</span><strong id="labor">0.00 $</strong></div>
+<div class="line"><span>Extras</span><strong id="extras">0.00 $</strong></div>
+<div class="line"><span>Sous-total</span><strong id="subtotal">0.00 $</strong></div>
+<div class="line"><span>TPS (5%)</span><strong id="tps">0.00 $</strong></div>
+<div class="line"><span>TVQ (9.975%)</span><strong id="tvq">0.00 $</strong></div>
+<div class="line total"><span>Total taxes incluses</span><strong id="total">0.00 $</strong></div>
+<div class="line"><span>Dépôt</span><strong id="dep">-0.00 $</strong></div>
+<div class="line total"><span>Grand total à payer</span><strong id="grand">0.00 $</strong></div>
 </div>
+
 </div>
 
 <script>
-const TPS=0.05, TVQ=0.09975, MIN=3;
+const price={mat:10,tape:2.5,robe:20,tv:50}
+function chg(id,n){let e=document.getElementById(id);e.textContent=Math.max(0,Number(e.textContent)+n)}
 
-function toHours(t){
-  if(!t) return null;
-  const [h,m]=t.split(":").map(Number);
-  return h + m/60;
-}
-function round15(h){ return Math.ceil(h/0.25)*0.25; }
+function calc(){
+let s=document.getElementById('start').value
+let e=document.getElementById('end').value
+if(!s||!e)return alert("Entrer les heures")
 
-function calcExtras(){
-  let total=0;
-  document.querySelectorAll(".extraRow").forEach(row=>{
-    const chk=row.querySelector(".extraChk");
-    const qty=row.querySelector(".extraQty");
-    if(chk && chk.checked){
-      total+= (parseFloat(chk.dataset.price)||0) * (parseInt(qty.value)||1);
-    }
-  });
-  total+= parseFloat(document.getElementById("extraAutre").value||0);
-  document.getElementById("extrasTotal").textContent=total.toFixed(2)+" $";
-  return total;
-}
+let ms=(new Date("1970-1-1 "+e)-new Date("1970-1-1 "+s))/3600000
+ms=Math.max(ms,3)
+ms=Math.ceil(ms*4)/4
 
-function calculer(){
-  const taux=+tauxInput.value;
-  const a=toHours(arrivee.value);
-  const d=toHours(depart.value);
-  if(a===null||d===null){ alert("Choisir heure arrivée et départ"); return; }
+let transport=parseFloat(document.getElementById('transport').value)
+let bill=ms+transport
+let rate=parseFloat(document.getElementById('rate').value)
 
-  let hTrav=d-a; if(hTrav<0) hTrav+=24;
-  hTrav=round15(hTrav);
+let extras=0
+for(let k in price){extras+=Number(document.getElementById(k).textContent)*price[k]}
 
-  const hFact=Math.max(hTrav,MIN)+(+transport.value);
-  const extras=calcExtras();
+let labor=bill*rate
+let sub=labor+extras
 
-  const sousTotal=(taux*hFact)+extras;
-
-  let tpsVal=0,tvqVal=0;
-  if(taxes.value==="on"){
-    tpsVal=sousTotal*TPS;
-    tvqVal=sousTotal*TVQ;
-  }
-
-  const total=sousTotal+tpsVal+tvqVal;
-  const dep=+depot.value;
-  const grand=total-dep;
-
-  result.style.display="block";
-  hTravTxt.textContent=hTrav.toFixed(2)+" h";
-  hFactTxt.textContent=hFact.toFixed(2)+" h";
-  subTxt.textContent=sousTotal.toFixed(2)+" $";
-  extraTxt.textContent=extras.toFixed(2)+" $";
-  tpsTxt.textContent=tpsVal.toFixed(2)+" $";
-  tvqTxt.textContent=tvqVal.toFixed(2)+" $";
-  totalTxt.textContent=total.toFixed(2)+" $";
-  depTxt.textContent="-"+dep.toFixed(2)+" $";
-  grandTxt.textContent=grand.toFixed(2)+" $";
+let tps=0,tvq=0
+if(document.getElementById('tax').value==="on"){
+tps=sub*0.05
+tvq=sub*0.09975
 }
 
-const tauxInput=taux,
-arrivee=document.getElementById("arrivee"),
-depart=document.getElementById("depart"),
-transport=document.getElementById("transport"),
-taxes=document.getElementById("taxes"),
-depot=document.getElementById("depot"),
-result=document.getElementById("result"),
-hTravTxt=document.getElementById("hTrav"),
-hFactTxt=document.getElementById("hFact"),
-subTxt=document.getElementById("sub"),
-extraTxt=document.getElementById("extraTxt"),
-tpsTxt=document.getElementById("tps"),
-tvqTxt=document.getElementById("tvq"),
-totalTxt=document.getElementById("total"),
-depTxt=document.getElementById("depTxt"),
-grandTxt=document.getElementById("grand");
+let total=sub+tps+tvq
+let dep=parseFloat(document.getElementById('deposit').value)
+let grand=total-dep
+
+document.getElementById('worked').textContent=ms.toFixed(2)+" h"
+document.getElementById('billable').textContent=bill.toFixed(2)+" h"
+document.getElementById('labor').textContent=labor.toFixed(2)+" $"
+document.getElementById('extras').textContent=extras.toFixed(2)+" $"
+document.getElementById('subtotal').textContent=sub.toFixed(2)+" $"
+document.getElementById('tps').textContent=tps.toFixed(2)+" $"
+document.getElementById('tvq').textContent=tvq.toFixed(2)+" $"
+document.getElementById('total').textContent=total.toFixed(2)+" $"
+document.getElementById('dep').textContent="-"+dep.toFixed(2)+" $"
+document.getElementById('grand').textContent=grand.toFixed(2)+" $"
+document.getElementById('res').style.display="block"
+}
 </script>
+
 </body>
 </html>
