@@ -458,13 +458,39 @@ depotMode.addEventListener("change", () => calculerTotal());
 taxesMode.addEventListener("change", () => calculerTotal());
 
 // ====== CALCUL TOTAL $ ======
+<script>
 function calculerTotal() {
-const tauxVal = parseFloat(taux.value || "0");
-const heuresVal = parseFloat(heuresHidden.value || "0");
+  const tauxVal = parseFloat(taux.value || "0");
+  const heuresVal = parseFloat(heuresHidden.value || "0");
 
-const autre = parseFloat(autreExtra.value || "0");
-const extras = extrasTotal + autre;
+  const autre = parseFloat(autreExtra.value || "0");
+  const extras = extrasTotal + autre;
 
+  // 1️⃣ Sous-total avant taxes
+  const sousTotalAvantTaxes = (heuresVal * tauxVal) + extras;
+
+  // 2️⃣ Taxes
+  const tps = sousTotalAvantTaxes * 0.05;
+  const tvq = sousTotalAvantTaxes * 0.09975;
+
+  // 3️⃣ Total taxes incluses
+  const totalTaxesIncluses = sousTotalAvantTaxes + tps + tvq;
+
+  // 4️⃣ Dépôt (taxes incluses)
+  const depot = 250;
+
+  // 5️⃣ Grand total
+  const grandTotal = totalTaxesIncluses - depot;
+
+  // UI
+  subtotalTxt.textContent = sousTotalAvantTaxes.toFixed(2) + " $";
+  tpsTxt.textContent = tps.toFixed(2) + " $";
+  tvqTxt.textContent = tvq.toFixed(2) + " $";
+  totalTaxesInclusesTxt.textContent = totalTaxesIncluses.toFixed(2) + " $";
+  depotTxt.textContent = "- " + depot.toFixed(2) + " $";
+  grandTotalTxt.textContent = grandTotal.toFixed(2) + " $";
+}
+</script>
 // Sous-total avant taxes
 const main = heuresVal * tauxVal;
 let sousTotal = main + extras;
