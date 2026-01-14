@@ -2,76 +2,164 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Calculatrice Déménagement – Transport Colivex</title>
+
 <style>
-body { font-family: Arial, sans-serif; background:#eef2f7; margin:0; padding:20px; }
-.container { max-width:440px; margin:auto; background:#ffffff; padding:20px; border-radius:14px; box-shadow:0 6px 14px rgba(0,0,0,.12); border-top:6px solid #c1121f; }
-.header { text-align:center; margin-bottom:10px; }
-.logo {
-  font-size:22px;
-  font-weight:bold;
-  color:#1f4e79;
+:root{
+--colivex-red:#c1121f;
+--colivex-blue:#1f4e79;
+--bg:#eef2f7;
+--card:#ffffff;
+--muted:#666;
+--border:#d9d9d9;
 }
-.logo span { color:#c1121f; }
-.subtitle { font-size:13px; color:#555; }
 
-label { font-weight:bold; margin-top:12px; display:block; color:#1f4e79; }
-input, select { width:100%; padding:10px; font-size:16px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
-button { width:100%; padding:14px; font-size:18px; background:#c1121f; color:#fff; border:none; border-radius:10px; margin-top:20px; }
-button:hover { background:#a50f19; }
-.toggle { background:#1f4e79; color:#fff; padding:12px; border-radius:10px; font-weight:bold; margin-top:15px; cursor:pointer; text-align:center; }
-.extras { display:none; margin-top:10px; }
+body{
+font-family: Arial, sans-serif;
+background: var(--bg);
+margin:0;
+padding:20px;
+}
 
-.result { margin-top:20px; padding:15px; background:#f1f7ff; border-radius:10px; font-size:16px; border-left:5px solid #1f4e79; }
-.total { font-size:18px; font-weight:bold; color:#c1121f; margin-top:8px; }
-.line { display:flex; justify-content:space-between; gap:12px; }
+.container{
+max-width: 460px;
+margin: auto;
+background: var(--card);
+padding: 20px;
+border-radius: 14px;
+box-shadow: 0 6px 14px rgba(0,0,0,.12);
+border-top: 6px solid var(--colivex-red);
+}
 
-.small { font-size:12px; color:#555; margin-top:10px; text-align:center; }
-hr { border:none; border-top:1px solid #ddd; margin:16px 0; }
+.header{
+text-align:center;
+margin-bottom:10px;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color: var(--colivex-blue);
+}
+.logo span{ color: var(--colivex-red); }
+
+.subtitle{
+font-size:13px;
+color: var(--muted);
+margin-top:4px;
+}
+
+label{
+font-weight:bold;
+margin-top:12px;
+display:block;
+color: var(--colivex-blue);
+}
+
+input, select{
+width:100%;
+padding:10px;
+font-size:16px;
+margin-top:6px;
+border-radius:8px;
+border:1px solid var(--border);
+box-sizing:border-box;
+background:#fff;
+}
+
+hr{
+border:none;
+border-top:1px solid #e5e5e5;
+margin:14px 0;
+}
+
+.btn{
+width:100%;
+padding:14px;
+font-size:18px;
+background: var(--colivex-red);
+color:#fff;
+border:none;
+border-radius:10px;
+margin-top:16px;
+cursor:pointer;
+}
+.btn:hover{ opacity:.95; }
+
+.toggle{
+background: var(--colivex-blue);
+color:#fff;
+padding:12px;
+border-radius:10px;
+font-weight:bold;
+margin-top:14px;
+cursor:pointer;
+text-align:center;
+user-select:none;
+}
+
+.extras{
+display:none;
+margin-top:10px;
+}
+
+.line{
+display:flex;
+justify-content:space-between;
+gap:12px;
+margin-top:8px;
+align-items:center;
+}
+
+.result{
+margin-top:16px;
+padding:14px;
+background:#f7f7f7;
+border-radius:10px;
+border-left:5px solid var(--colivex-blue);
+}
+
+.total{
+font-size:18px;
+font-weight:bold;
+}
+
+small{
+display:block;
+margin-top:10px;
+color: var(--muted);
+font-size:12px;
+line-height:1.35;
+}
 </style>
 </head>
+
 <body>
 <div class="container">
-
 <div class="header">
-  <div class="logo">Transport <span>Colivex</span></div>
-  <div class="subtitle">Calculatrice terrain – avant contrat</div>
+<div class="logo">Transport <span>Colivex</span></div>
+<div class="subtitle">Calculatrice déménagement – Chauffeurs</div>
+<small>Minimum appliqué automatiquement : <b>3h travail + transport</b>.</small>
 </div>
 
+<!-- TARIF -->
 <label>Tarif horaire ($)</label>
-<input type="number" id="rate" value="155">
+<input type="number" id="taux" value="155" step="1" min="0" inputmode="decimal">
 
-<label>Heures travaillées</label>
-<input type="number" id="hours" value="3">
+<hr>
 
-Salim Bentriou <info@transportcolivex.com>
-14 h 32 (il y a 1 minute)
-à moi
-<!-- Heures -->
+<!-- HEURES AUTO -->
 <label>Heure d’arrivée</label>
 <input type="time" id="heureArrivee">
 
 <label>Heure de départ</label>
 <input type="time" id="heureDepart">
 
-
-</select>
-
-<div class="line">
-<span>Heures travaillées</span>
-<strong id="heuresTravail">0.00 h</strong>
-</div>
-
-<div class="line">
-<span>Heures facturables (travail + transport)</span>
-<strong id="heuresFacturables">0.00 h</strong>
-</div><!-- Heures -->
-
-
+<!-- TRANSPORT MODIFIABLE -->
 <label>Frais de transport (heures)</label>
-
+<select id="transportHeures">
 <option value="0">0 h</option>
 <option value="0.5">0.5 h</option>
 <option value="1" selected>1 h</option>
@@ -79,69 +167,137 @@ Salim Bentriou <info@transportcolivex.com>
 <option value="2">2 h</option>
 </select>
 
+<!-- RÉSUMÉ HEURES -->
 <div class="line">
-<span>Heures travaillées</span>
+<span>Heures de travail (calculées)</span>
 <strong id="heuresTravail">0.00 h</strong>
 </div>
 
 <div class="line">
-<span>Heures facturables (travail + transport)</span>
+<span>Transport</span>
+<strong id="transportAffiche">+ 1.00 h</strong>
+</div>
+
+<div class="line total">
+<span>Total heures facturables</span>
 <strong id="heuresFacturables">0.00 h</strong>
 </div>
-<label>Minimum d'heures</label>
-<input type="number" id="minHours" value="3">
 
-<label>Transport (heures)</label>
-<input type="number" id="travel" value="1">
+<!-- CHAMP TECHNIQUE UTILISÉ POUR LE TOTAL $ -->
+<!-- (sert de "heures facturables" pour le calcul) -->
+<input type="number" id="heures" step="0.25" style="display:none;">
 
-<div class="toggle" onclick="toggleExtras()">➕ AJOUTER DES EXTRAS</div>
+<hr>
 
-<div class="extras" id="extras">
-  <label>Sac à matelas (10 $)</label>
-  <select id="mattress"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+<!-- EXTRAS -->
+<div class="toggle" id="toggleExtras">Ajouter des extras ▼</div>
+<div class="extras" id="extrasBox">
+<label>Extra (menu)</label>
+<select id="extraSelect">
+<option value="0">Choisir…</option>
+<option value="10">Sac à matelas – 10$</option>
+<option value="2.5">Tape – 2.50$</option>
+<option value="20">Boîte garde-robe – 20$</option>
+<option value="50">Boîte TV – 50$</option>
+</select>
 
-  <label>Ruban / Tape (2,50 $)</label>
-  <select id="tape"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+<label>Autre extra ($) (optionnel)</label>
+<input type="number" id="autreExtra" value="0" step="0.01" min="0" inputmode="decimal">
 
-  <label>Boîte garde-robe (20 $)</label>
-  <select id="wardrobe"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
-
-  <label>Boîte TV (50 $)</label>
-  <select id="tvbox"><option>0</option><option>1</option><option>2</option></select>
-
-  <label>Autre extra ($)</label>
-  <input type="number" id="other" value="0">
+<div class="line">
+<span>Total extras</span>
+<strong id="extrasTotalTxt">0.00 $</strong>
 </div>
 
-<label>Dépôt payé (tx incl.)</label>
-<input type="number" id="deposit" value="250">
-
-<button onclick="calculer()">CALCULER</button>
-
-<div class="result" id="result"></div>
-
-<div class="small">
-Heures facturées = max(heures, minimum + transport)<br>
-TPS 5 % • TVQ 9,975 % • Dépôt taxes incluses
+<small>Chaque extra choisi dans le menu s’ajoute au total extras (cumulatif).</small>
 </div>
 
+<hr>
+
+<!-- DÉPÔT -->
+<label>Dépôt (taxes incluses) à déduire</label>
+<select id="depotMode">
+<option value="0">Aucun dépôt</option>
+<option value="250" selected>Déduire 250$</option>
+</select>
+
+<!-- TAXES -->
+<label>Taxes</label>
+<select id="taxesMode">
+<option value="avec" selected>Ajouter TPS/TVQ</option>
+<option value="sans">Sans taxes</option>
+</select>
+
+<button class="btn" type="button" onclick="calculerTotal()">Calculer</button>
+
+<!-- RÉSULTATS -->
+<div class="result">
+<div class="line"><span>Sous-total (avant taxes)</span><strong id="subtotalTxt">0.00 $</strong></div>
+<div class="line"><span>TPS (5%)</span><strong id="tpsTxt">0.00 $</strong></div>
+<div class="line"><span>TVQ (9.975%)</span><strong id="tvqTxt">0.00 $</strong></div>
+<hr>
+<div class="line total"><span>TOTAL</span><strong id="totalTxt">0.00 $</strong></div>
+<small>
+Heures facturables = <b>max(heures travail, 3.00)</b> + transport.<br>
+Dépôt soustrait (taxes incluses).
+</small>
+</div>
 </div>
 
 <script>
+// ====== RÈGLES ======
+const MIN_TRAVAIL_H = 3; // ✅ Minimum bloqué: 3h de travail
+const TPS = 0.05;
+const TVQ = 0.09975;
+
+// ====== UI / TOGGLE EXTRAS ======
+const toggleExtrasBtn = document.getElementById("toggleExtras");
+const extrasBox = document.getElementById("extrasBox");
+toggleExtrasBtn.addEventListener("click", () => {
+const open = extrasBox.style.display === "block";
+extrasBox.style.display = open ? "none" : "block";
+toggleExtrasBtn.textContent = open ? "Ajouter des extras ▼" : "Ajouter des extras ▲";
+});
+
+// ====== INPUTS ======
+const taux = document.getElementById("taux");
+
 const arrivee = document.getElementById("heureArrivee");
 const depart = document.getElementById("heureDepart");
 const transport = document.getElementById("transportHeures");
 
-// Affichages (TES ids)
+// Affichages heures
 const outTravail = document.getElementById("heuresTravail");
+const outTransport = document.getElementById("transportAffiche");
 const outFact = document.getElementById("heuresFacturables");
 
-// ✅ IMPORTANT: mets ici l'id du champ où tu entres "Heures travaillées" (le input 3)
-const champHeuresInput = document.getElementById("heures"); // <- change si besoin
+// Champ technique (heures facturables) pour le calcul $
+const heuresHidden = document.getElementById("heures");
 
+// Extras
+const extraSelect = document.getElementById("extraSelect");
+const autreExtra = document.getElementById("autreExtra");
+const extrasTotalTxt = document.getElementById("extrasTotalTxt");
+let extrasTotal = 0;
+
+// Dépôt / Taxes
+const depotMode = document.getElementById("depotMode");
+const taxesMode = document.getElementById("taxesMode");
+
+// Résultats
+const subtotalTxt = document.getElementById("subtotalTxt");
+const tpsTxt = document.getElementById("tpsTxt");
+const tvqTxt = document.getElementById("tvqTxt");
+const totalTxt = document.getElementById("totalTxt");
+
+// ====== OUTILS ======
 function timeToMinutes(t) {
 if (!t) return null;
-const [h, m] = t.split(":").map(Number);
+const parts = t.split(":");
+if (parts.length !== 2) return null;
+const h = Number(parts[0]);
+const m = Number(parts[1]);
+if (Number.isNaN(h) || Number.isNaN(m)) return null;
 return h * 60 + m;
 }
 
@@ -149,32 +305,97 @@ function roundQuarter(h) {
 return Math.round(h * 4) / 4; // quart d'heure
 }
 
+// ====== CALCUL HEURES AUTO ======
 function calculHeuresAuto() {
 const a = timeToMinutes(arrivee.value);
 const d = timeToMinutes(depart.value);
 
-if (a === null || d === null) return;
+// Si pas rempli, on met à 0.00
+if (a === null || d === null) {
+outTravail.textContent = "0.00 h";
+outTransport.textContent = "+ " + parseFloat(transport.value || "0").toFixed(2) + " h";
+outFact.textContent = "0.00 h";
+heuresHidden.value = "";
+return;
+}
 
 let minutes = d - a;
 if (minutes < 0) minutes += 1440; // passe minuit
 
-const heuresTravail = roundQuarter(minutes / 60);
+const heuresTravailCalc = roundQuarter(minutes / 60);
 const hTransport = parseFloat(transport.value || "0");
-const heuresFact = heuresTravail + hTransport;
 
-// Affichage
-if (outTravail) outTravail.textContent = heuresTravail.toFixed(2) + " h";
-if (outFact) outFact.textContent = heuresFact.toFixed(2) + " h";
+// ✅ Minimum bloqué à 3h de travail
+const heuresTravailChargees = Math.max(heuresTravailCalc, MIN_TRAVAIL_H);
+const heuresFacturables = heuresTravailChargees + hTransport;
 
-// Remplit le champ heures utilisé pour le total $
-if (champHeuresInput) champHeuresInput.value = heuresFact.toFixed(2);
+outTravail.textContent = heuresTravailCalc.toFixed(2) + " h";
+outTransport.textContent = "+ " + hTransport.toFixed(2) + " h";
+outFact.textContent = heuresFacturables.toFixed(2) + " h";
 
-// Relance ton calcul total si la fonction existe
-if (typeof calculerTotal === "function") calculerTotal();
+// Ce champ sert au calcul $ (taux * heures facturables)
+heuresHidden.value = heuresFacturables.toFixed(2);
+
+// Mise à jour du total automatiquement
+calculerTotal();
 }
 
 arrivee.addEventListener("change", calculHeuresAuto);
 depart.addEventListener("change", calculHeuresAuto);
-transport.addEventListener("change", calculHeuresAuto);</script>
+transport.addEventListener("change", calculHeuresAuto);
+
+// ====== EXTRAS ======
+extraSelect.addEventListener("change", () => {
+const v = parseFloat(extraSelect.value || "0");
+if (v > 0) {
+extrasTotal += v;
+extrasTotalTxt.textContent = extrasTotal.toFixed(2) + " $";
+extraSelect.value = "0";
+calculerTotal();
+}
+});
+
+autreExtra.addEventListener("input", () => calculerTotal());
+taux.addEventListener("input", () => calculerTotal());
+depotMode.addEventListener("change", () => calculerTotal());
+taxesMode.addEventListener("change", () => calculerTotal());
+
+// ====== CALCUL TOTAL $ ======
+function calculerTotal() {
+const tauxVal = parseFloat(taux.value || "0");
+const heuresVal = parseFloat(heuresHidden.value || "0");
+
+const autre = parseFloat(autreExtra.value || "0");
+const extras = extrasTotal + autre;
+
+// Sous-total avant taxes
+const main = heuresVal * tauxVal;
+let sousTotal = main + extras;
+
+// Taxes
+let tps = 0, tvq = 0, total = sousTotal;
+
+if (taxesMode.value === "avec") {
+tps = sousTotal * TPS;
+tvq = sousTotal * TVQ;
+total = sousTotal + tps + tvq;
+}
+
+// Dépôt (taxes incluses) à soustraire
+const depot = parseFloat(depotMode.value || "0");
+total = total - depot;
+
+// UI
+subtotalTxt.textContent = sousTotal.toFixed(2) + " $";
+tpsTxt.textContent = tps.toFixed(2) + " $";
+tvqTxt.textContent = tvq.toFixed(2) + " $";
+totalTxt.textContent = total.toFixed(2) + " $";
+}
+
+// Init affichage transport + calc total initial
+outTransport.textContent = "+ " + parseFloat(transport.value || "0").toFixed(2) + " h";
+calculerTotal();
+</script>
 </body>
 </html>
+
