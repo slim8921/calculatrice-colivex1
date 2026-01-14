@@ -3,20 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculatrice Colivex</title>
+<title>Calculatrice Colivex – Extras multiples</title>
 
 <style>
 body{font-family:Arial;background:#eef2f7;margin:0;padding:18px}
-.container{max-width:480px;margin:auto;background:#fff;padding:18px;border-radius:14px;border-top:6px solid #c1121f}
+.container{max-width:520px;margin:auto;background:#fff;padding:18px;border-radius:14px;border-top:6px solid #c1121f}
 h1{text-align:center;color:#1f4e79;margin:0}
 h1 span{color:#c1121f}
 label{font-weight:700;margin-top:12px;display:block}
 input,select,button{width:100%;padding:12px;margin-top:6px;font-size:16px;border-radius:10px;border:1px solid #ccc}
 button{background:#c1121f;color:#fff;font-weight:800;border:none;margin-top:18px}
-.toggle{margin-top:14px;background:#1f4e79;color:#fff;padding:12px;border-radius:10px;text-align:center;font-weight:800;cursor:pointer}
 .result{margin-top:18px;background:#f7f9fc;padding:14px;border-radius:12px;border-left:6px solid #1f4e79}
 .line{display:flex;justify-content:space-between;margin:8px 0}
 .total{font-weight:900;font-size:18px}
+.extras{margin-top:12px;border:1px dashed #c7cedb;border-radius:12px;padding:12px;background:#f8fbff}
+.extraRow{display:grid;grid-template-columns:1fr 90px 90px;gap:8px;align-items:center;margin:6px 0}
+.extraRow input[type="number"]{padding:8px}
+.small{font-size:12px;color:#666}
 </style>
 </head>
 
@@ -42,18 +45,40 @@ button{background:#c1121f;color:#fff;font-weight:800;border:none;margin-top:18px
   <option value="2">2 h</option>
 </select>
 
-<label>Extra (1 seul)</label>
-<select id="extra">
-  <option value="0">Aucun</option>
-  <option value="10">Sac à matelas – 10 $</option>
-  <option value="2.5">Tape – 2.50 $</option>
-  <option value="20">Boîte garde-robe – 20 $</option>
-  <option value="50">Boîte TV – 50 $</option>
-</select>
+<!-- EXTRAS MULTIPLES -->
+<div class="extras">
+  <strong>Extras (plusieurs possibles)</strong>
+  <div class="extraRow">
+    <label><input type="checkbox" class="extraChk" data-price="10"> Sac à matelas</label>
+    <input type="number" class="extraQty" value="1" min="1">
+    <span>10 $</span>
+  </div>
+  <div class="extraRow">
+    <label><input type="checkbox" class="extraChk" data-price="2.5"> Tape</label>
+    <input type="number" class="extraQty" value="1" min="1">
+    <span>2.50 $</span>
+  </div>
+  <div class="extraRow">
+    <label><input type="checkbox" class="extraChk" data-price="20"> Boîte garde-robe</label>
+    <input type="number" class="extraQty" value="1" min="1">
+    <span>20 $</span>
+  </div>
+  <div class="extraRow">
+    <label><input type="checkbox" class="extraChk" data-price="50"> Boîte TV</label>
+    <input type="number" class="extraQty" value="1" min="1">
+    <span>50 $</span>
+  </div>
+  <div class="extraRow">
+    <label>Autre extra ($)</label>
+    <input type="number" id="extraAutre" value="0" min="0" step="0.01">
+    <span></span>
+  </div>
+  <div class="line small"><span>Total extras</span><strong id="extrasTotal">0.00 $</strong></div>
+</div>
 
 <label>Taxes</label>
 <select id="taxes">
-  <option value="on" selected>Avec taxes (TPS + TVQ)</option>
+  <option value="on" selected>Avec taxes</option>
   <option value="off">Sans taxes</option>
 </select>
 
@@ -66,13 +91,13 @@ button{background:#c1121f;color:#fff;font-weight:800;border:none;margin-top:18px
 <button onclick="calculer()">Calculer</button>
 
 <div class="result" id="result" style="display:none">
-  <div class="line"><span>Heures travaillées</span><strong id="hTrav">0.00 h</strong></div>
+  <div class="line"><span>Heures travaillées (15 min)</span><strong id="hTrav">0.00 h</strong></div>
   <div class="line"><span>Heures facturables</span><strong id="hFact">0.00 h</strong></div>
 
   <hr>
 
   <div class="line"><span>Sous-total</span><strong id="sub">0.00 $</strong></div>
-  <div class="line"><span>Extra</span><strong id="extraTxt">0.00 $</strong></div>
+  <div class="line"><span>Extras</span><strong id="extraTxt">0.00 $</strong></div>
   <div class="line"><span>TPS (5 %)</span><strong id="tps">0.00 $</strong></div>
   <div class="line"><span>TVQ (9.975 %)</span><strong id="tvq">0.00 $</strong></div>
 
@@ -85,21 +110,42 @@ button{background:#c1121f;color:#fff;font-weight:800;border:none;margin-top:18px
 <script>
 const TPS=0.05, TVQ=0.09975, MIN=3;
 
-function toH(t){ if(!t)return null; let[a,b]=t.split(":").map(Number); return a+b/60; }
+function toHours(t){
+  if(!t) return null;
+  const [h,m]=t.split(":").map(Number);
+  return h + m/60;
+}
+function round15(h){ return Math.ceil(h/0.25)*0.25; }
+
+function calcExtras(){
+  let total=0;
+  document.querySelectorAll(".extraRow").forEach(row=>{
+    const chk=row.querySelector(".extraChk");
+    const qty=row.querySelector(".extraQty");
+    if(chk && chk.checked){
+      total+= (parseFloat(chk.dataset.price)||0) * (parseInt(qty.value)||1);
+    }
+  });
+  total+= parseFloat(document.getElementById("extraAutre").value||0);
+  document.getElementById("extrasTotal").textContent=total.toFixed(2)+" $";
+  return total;
+}
 
 function calculer(){
   const taux=+tauxInput.value;
-  const a=toH(arrivee.value);
-  const d=toH(depart.value);
+  const a=toHours(arrivee.value);
+  const d=toHours(depart.value);
   if(a===null||d===null){ alert("Choisir heure arrivée et départ"); return; }
 
-  let hTrav=d-a; if(hTrav<0)hTrav+=24;
+  let hTrav=d-a; if(hTrav<0) hTrav+=24;
+  hTrav=round15(hTrav);
+
   const hFact=Math.max(hTrav,MIN)+(+transport.value);
+  const extras=calcExtras();
 
-  const extraVal=+extra.value;
-  const sousTotal=(taux*hFact)+extraVal;
+  const sousTotal=(taux*hFact)+extras;
 
-  let tpsVal=0, tvqVal=0;
+  let tpsVal=0,tvqVal=0;
   if(taxes.value==="on"){
     tpsVal=sousTotal*TPS;
     tvqVal=sousTotal*TVQ;
@@ -113,7 +159,7 @@ function calculer(){
   hTravTxt.textContent=hTrav.toFixed(2)+" h";
   hFactTxt.textContent=hFact.toFixed(2)+" h";
   subTxt.textContent=sousTotal.toFixed(2)+" $";
-  extraTxt.textContent=extraVal.toFixed(2)+" $";
+  extraTxt.textContent=extras.toFixed(2)+" $";
   tpsTxt.textContent=tpsVal.toFixed(2)+" $";
   tvqTxt.textContent=tvqVal.toFixed(2)+" $";
   totalTxt.textContent=total.toFixed(2)+" $";
@@ -125,7 +171,6 @@ const tauxInput=taux,
 arrivee=document.getElementById("arrivee"),
 depart=document.getElementById("depart"),
 transport=document.getElementById("transport"),
-extra=document.getElementById("extra"),
 taxes=document.getElementById("taxes"),
 depot=document.getElementById("depot"),
 result=document.getElementById("result"),
@@ -140,4 +185,4 @@ depTxt=document.getElementById("depTxt"),
 grandTxt=document.getElementById("grand");
 </script>
 </body>
-</html
+</html>
