@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculatrice – Transport Colivex</title>
+<title>Calculatrice Déménagement – Transport Colivex</title>
 
 <style>
 body {
   font-family: Arial, sans-serif;
   background:#eef2f7;
+  margin:0;
   padding:20px;
 }
 .container {
@@ -16,62 +17,76 @@ body {
   margin:auto;
   background:#fff;
   padding:20px;
-  border-radius:12px;
+  border-radius:14px;
   box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.header {
+  text-align:center;
+  margin-bottom:15px;
 }
 .logo {
   font-size:22px;
   font-weight:bold;
-  text-align:center;
   color:#1f4e79;
 }
 .logo span { color:#c1121f; }
 .subtitle {
-  text-align:center;
   font-size:13px;
   color:#555;
-  margin-bottom:15px;
 }
+
 label {
-  display:block;
   font-weight:bold;
   margin-top:12px;
+  display:block;
   color:#1f4e79;
 }
+
 input, select {
   width:100%;
   padding:10px;
+  font-size:16px;
   margin-top:5px;
   border-radius:8px;
   border:1px solid #ccc;
-  font-size:16px;
 }
+
+button {
+  width:100%;
+  padding:14px;
+  margin-top:20px;
+  background:#c1121f;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+}
+
 .result {
-  margin-top:18px;
-  padding:12px;
-  background:#f7f9fc;
+  margin-top:20px;
+  padding:15px;
+  background:#f7f7f7;
   border-radius:10px;
   border-left:5px solid #1f4e79;
 }
+
 .line {
   display:flex;
   justify-content:space-between;
   margin:6px 0;
 }
+
 .total {
   font-size:18px;
   font-weight:bold;
-  color:#1f4e79;
+  margin-top:10px;
 }
-.small {
-  font-size:12px;
-  color:#555;
-  margin-top:8px;
-}
+
 hr {
   border:none;
   border-top:1px solid #ddd;
-  margin:12px 0;
+  margin:10px 0;
 }
 </style>
 </head>
@@ -79,10 +94,12 @@ hr {
 <body>
 <div class="container">
 
-<div class="logo">Transport <span>Colivex</span></div>
-<div class="subtitle">Calculatrice terrain – facturation</div>
+<div class="header">
+  <div class="logo">Transport <span>Colivex</span></div>
+  <div class="subtitle">Calculatrice terrain</div>
+</div>
 
-<label>Taux horaire ($)</label>
+<label>Tarif horaire ($)</label>
 <input type="number" id="taux" value="155">
 
 <label>Heure d’arrivée</label>
@@ -97,100 +114,73 @@ hr {
   <option value="0.5">0.5 h</option>
   <option value="1" selected>1 h</option>
   <option value="1.5">1.5 h</option>
-  <option value="2">2 h</option>
 </select>
 
+<label>Dépôt (taxes incluses)</label>
+<select id="depot">
+  <option value="0">Aucun dépôt</option>
+  <option value="250" selected>250 $</option>
+</select>
+
+<button onclick="calculer()">Calculer</button>
+
 <div class="result">
-
-  <div class="line">
-    <span>Heures travaillées</span>
-    <strong id="heuresTravail">0.00 h</strong>
-  </div>
-
-  <div class="line">
-    <span>Heures facturables</span>
-    <strong id="heuresFact">0.00 h</strong>
-  </div>
+  <div class="line"><span>Heures travaillées</span><strong id="hTravail">0.00 h</strong></div>
+  <div class="line"><span>Heures facturables</span><strong id="hFacturable">0.00 h</strong></div>
 
   <hr>
 
-  <div class="line">
-    <span>Sous-total (avant taxes)</span>
-    <strong id="sousTotal">0.00 $</strong>
-  </div>
+  <div class="line"><span>Sous-total (avant taxes)</span><strong id="sousTotal">0.00 $</strong></div>
+  <div class="line"><span>TPS (5 %)</span><strong id="tps">0.00 $</strong></div>
+  <div class="line"><span>TVQ (9.975 %)</span><strong id="tvq">0.00 $</strong></div>
 
-  <div class="line">
-    <span>TPS (5 %)</span>
-    <strong id="tps">0.00 $</strong>
-  </div>
+  <div class="line total"><span>Total (taxes incluses)</span><strong id="total">0.00 $</strong></div>
 
-  <div class="line">
-    <span>TVQ (9,975 %)</span>
-    <strong id="tvq">0.00 $</strong>
-  </div>
-
-  <div class="line total">
-    <span>Total (taxes incluses)</span>
-    <strong id="totalTaxes">0.00 $</strong>
-  </div>
-
-  <div class="line">
-    <span>Dépôt reçu (−250 $)</span>
-    <strong id="depot">−250.00 $</strong>
-  </div>
+  <div class="line"><span>Dépôt reçu (− 250 $)</span><strong id="depotTxt">0.00 $</strong></div>
 
   <hr>
 
-  <div class="line total">
-    <span>Total à payer</span>
-    <strong id="totalPayer">0.00 $</strong>
-  </div>
-
-  <div class="small">
-    Heures facturables = max(heures travaillées, 3h) + transport.<br>
-    Total = Sous-total + TPS + TVQ − dépôt.
-  </div>
-
+  <div class="line total"><span>Total à payer</span><strong id="aPayer">0.00 $</strong></div>
 </div>
+
 </div>
 
 <script>
 function calculer() {
   const taux = parseFloat(document.getElementById("taux").value) || 0;
-  const arrivee = document.getElementById("arrivee").value;
-  const depart = document.getElementById("depart").value;
   const transport = parseFloat(document.getElementById("transport").value) || 0;
+  const depot = parseFloat(document.getElementById("depot").value) || 0;
+
+  const arr = document.getElementById("arrivee").value;
+  const dep = document.getElementById("depart").value;
 
   let heuresTravail = 0;
 
-  if (arrivee && depart) {
-    const a = new Date(`1970-01-01T${arrivee}`);
-    const d = new Date(`1970-01-01T${depart}`);
-    heuresTravail = (d - a) / 36e5;
+  if (arr && dep) {
+    const a = new Date(`1970-01-01T${arr}`);
+    const d = new Date(`1970-01-01T${dep}`);
+    heuresTravail = (d - a) / 3600000;
     if (heuresTravail < 0) heuresTravail = 0;
   }
 
-  const heuresBase = Math.max(heuresTravail, 3);
-  const heuresFact = heuresBase + transport;
+  // minimum 3h travail
+  const heuresFacturables = Math.max(heuresTravail, 3) + transport;
 
-  const sousTotal = heuresFact * taux;
+  const sousTotal = heuresFacturables * taux;
   const tps = sousTotal * 0.05;
   const tvq = sousTotal * 0.09975;
-  const totalTaxes = sousTotal + tps + tvq;
-  const totalPayer = totalTaxes - 250;
+  const total = sousTotal + tps + tvq;
+  const aPayer = total - depot;
 
-  document.getElementById("heuresTravail").innerText = heuresTravail.toFixed(2) + " h";
-  document.getElementById("heuresFact").innerText = heuresFact.toFixed(2) + " h";
-  document.getElementById("sousTotal").innerText = sousTotal.toFixed(2) + " $";
-  document.getElementById("tps").innerText = tps.toFixed(2) + " $";
-  document.getElementById("tvq").innerText = tvq.toFixed(2) + " $";
-  document.getElementById("totalTaxes").innerText = totalTaxes.toFixed(2) + " $";
-  document.getElementById("totalPayer").innerText = totalPayer.toFixed(2) + " $";
+  document.getElementById("hTravail").textContent = heuresTravail.toFixed(2) + " h";
+  document.getElementById("hFacturable").textContent = heuresFacturables.toFixed(2) + " h";
+  document.getElementById("sousTotal").textContent = sousTotal.toFixed(2) + " $";
+  document.getElementById("tps").textContent = tps.toFixed(2) + " $";
+  document.getElementById("tvq").textContent = tvq.toFixed(2) + " $";
+  document.getElementById("total").textContent = total.toFixed(2) + " $";
+  document.getElementById("depotTxt").textContent = depot ? "-" + depot.toFixed(2) + " $" : "0.00 $";
+  document.getElementById("aPayer").textContent = aPayer.toFixed(2) + " $";
 }
-
-document.querySelectorAll("input, select").forEach(el =>
-  el.addEventListener("input", calculer)
-);
 </script>
 
 </body>
