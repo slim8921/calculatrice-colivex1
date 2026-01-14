@@ -231,8 +231,45 @@ line-height:1.35;
 <button class="btn" type="button" onclick="calculerTotal()">Calculer</button>
 
 <!-- RÉSULTATS -->
-<div class="result">
+<div class="result"><div class="result">
+  <div class="line">
+    <span>Sous-total (avant taxes)</span>
+    <strong id="subtotalTxt">0.00 $</strong>
+  </div>
+
+  <div class="line">
+    <span>TPS (5 %)</span>
+    <strong id="tpsTxt">0.00 $</strong>
+  </div>
+
+  <div class="line">
+    <span>TVQ (9,975 %)</span>
+    <strong id="tvqTxt">0.00 $</strong>
+  </div>
+
+  <div class="line total">
+    <span>Total (taxes incluses)</span>
+    <strong id="totalTaxesInclusesTxt">0.00 $</strong>
+  </div>
+
+  <div class="line">
+    <span>Dépôt reçu (− 250 $)</span>
+    <strong id="depotTxt">- 250.00 $</strong>
+  </div>
+
+  <hr>
+
+  <div class="line total">
+    <span>Grand total à payer</span>
+    <strong id="grandTotalTxt">0.00 $</strong>
+  </div>
+
+  <small>
+    Formule : <b>Sous-total + TPS + TVQ = Total</b>, puis <b>Total − dépôt = Grand total</b>.
+  </small>
+</div>
 <div class="line">
+    
 <span>Sous-total (avant taxes)</span>
 <strong id="subtotalTxt">0.00 $</strong>
 </div>
