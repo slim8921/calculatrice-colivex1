@@ -1,176 +1,179 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0b4aa2">
-
-<link rel="icon" href="./icons/icon-192.png">
-<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Colivex">#
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculatrice Colivex</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculatrice Colivex</title>
 
-<style>
-body{font-family:Arial;background:#f4f6f8;margin:0}
-.container{max-width:520px;margin:auto;padding:15px;background:#fff;border-radius:12px}
-h2{text-align:center;color:#0b3c5d}
-label{font-weight:bold;margin-top:10px;display:block}
-input,select,button{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:1px solid #ccc;font-size:16px}
-button{background:#c4161c;color:#fff;border:none;margin-top:12px}
-.box{margin-top:15px;padding:15px;border-left:5px solid #0b3c5d;background:#f9fbfc;border-radius:8px}
-.line{display:flex;justify-content:space-between;margin:6px 0}
-.total{font-weight:bold;font-size:18px}
-.extra-row{display:flex;gap:6px;margin-top:6px}
-.small{font-size:13px;color:#555}
-</style>
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0b4aa2">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 15px;
+    }
 
-<link rel="icon" href="./icons/icon-192.png">
-<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Colivex">
+    .container {
+      max-width: 420px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #c4001a;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #003b8e;
+      margin-top: 0;
+      font-size: 16px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #003b8e;
+      color: white;
+      border: none;
+      margin-top: 12px;
+    }
+
+    .add-btn {
+      background: #c4001a;
+    }
+
+    .extras-list {
+      margin-top: 10px;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .extra-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .total {
+      margin-top: 15px;
+      padding: 12px;
+      background: #003b8e;
+      color: white;
+      border-radius: 8px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
-<h2>Calculatrice terrain – Colivex</h2>
+  <div class="container">
+    <h1>Transport Colivex</h1>
+    <h2>Calculatrice de facture</h2>
 
-<label>Taux horaire ($)</label>
-<input type="number" id="rate" value="155">
+    <label>Tarif horaire ($)</label>
+    <input type="number" id="rate" value="145" />
 
-<label>Heure d’arrivée</label>
-<input type="time" id="start">
+    <label>Heures travaillées</label>
+    <input type="number" id="hours" step="0.25" placeholder="ex: 6.5" />
 
-<label>Heure de départ</label>
-<input type="time" id="end">
+    <label>Frais de transport (1h)</label>
+    <input type="number" id="transport" value="145" />
 
-<label>Transport (heures)</label>
-<select id="transport">
-<option value="0">0 h</option>
-<option value="0.5">0.5 h</option>
-<option value="1" selected>1 h</option>
-<option value="1.5">1.5 h</option>
-</select>
+    <label>Dépôt reçu (taxes incluses)</label>
+    <input type="number" id="deposit" value="250" />
 
-<label>Extras (panier)</label>
-<div class="extra-row">
-<select id="extraSelect">
-<option value="">Choisir un article</option>
-<option data-price="2.5">Ruban adhésif (TAPE) – 2.50 $</option>
-<option data-price="6">Housse matelas 39" – 6.00 $</option>
-<option data-price="8">Housse matelas 60" – 8.00 $</option>
-<option data-price="11">Housse matelas 70" – 11.00 $</option>
-<option data-price="2.25">Boîte 1.5 pi³ – 2.25 $</option>
-<option data-price="2.75">Boîte 2 pi³ – 2.75 $</option>
-<option data-price="4.5">Boîte 4 pi³ – 4.50 $</option>
-<option data-price="5.5">Boîte 5 pi³ – 5.50 $</option>
-<option data-price="7">Boîte vaisselle – 7.00 $</option>
-<option data-price="7.5">Boîte abat-jour – 7.50 $</option>
-<option data-price="18.5">Boîte garde-robe – 18.50 $</option>
-<option data-price="0">Garde-robe NO CHARGE – 0.00 $</option>
-<option data-price="7.5">Boîte miroir/cadre (Inner) – 7.50 $</option>
-<option data-price="8.5">Boîte miroir/cadre (Outer) – 8.50 $</option>
-<option data-price="8.5">Papier bulles 5' – 8.50 $</option>
-<option data-price="8.5">Papier bulles 10' – 8.50 $</option>
-<option data-price="15">Papier emballage 10 lb – 15.00 $</option>
-<option data-price="27.5">Papier emballage 25 lb – 27.50 $</option>
-<option data-price="25">Couverture matelassée – 25.00 $</option>
-<option data-price="15">Couverture matelassée usagée – 15.00 $</option>
-<option data-price="18.5">Garde-robe usagée – 18.50 $</option>
-</select>
-<input type="number" id="extraQty" min="1" value="1">
-</div>
+    <hr>
 
-<button onclick="addExtra()">Ajouter l’extra</button>
-<div class="small" id="extrasList"></div>
+    <label>Extras</label>
+    <select id="extraSelect">
+      <option value="10">Sac à matelas – 10 $</option>
+      <option value="2.5">Tape – 2.50 $</option>
+      <option value="20">Boîte garde-robe – 20 $</option>
+      <option value="50">Boîte TV – 50 $</option>
+      <option value="0">Autre extra – 0 $</option>
+    </select>
 
-<label>Taxes</label>
-<select id="taxMode">
-<option value="with">Avec taxes</option>
-<option value="without">Sans taxes</option>
-</select>
+    <label>Quantité</label>
+    <input type="number" id="extraQty" value="1" />
 
-<label>Dépôt (taxes incluses)</label>
-<select id="deposit">
-<option value="0">Aucun</option>
-<option value="250" selected>250 $</option>
-</select>
+    <button class="add-btn" onclick="addExtra()">Ajouter l’extra</button>
 
-<button onclick="calculate()">Calculer</button>
+    <div class="extras-list" id="extrasList"></div>
 
-<div class="box">
-<div class="line"><span>Heures travaillées</span><strong id="workH">0.00 h</strong></div>
-<div class="line"><span>Heures facturables</span><strong id="billH">0.00 h</strong></div>
-<hr>
-<div class="line"><span>Sous-total</span><strong id="sub">0.00 $</strong></div>
-<div class="line"><span>Extras</span><strong id="extraTotal">0.00 $</strong></div>
-<div class="line"><span>TPS (5%)</span><strong id="tps">0.00 $</strong></div>
-<div class="line"><span>TVQ (9.975%)</span><strong id="tvq">0.00 $</strong></div>
-<div class="line total"><span>Total taxes incluses</span><span id="total">0.00 $</span></div>
-<div class="line"><span>Dépôt reçu</span><strong id="dep">-0.00 $</strong></div>
-<div class="line total"><span>Grand total à payer</span><span id="grand">0.00 $</span></div>
-</div>
-</div>
+    <button onclick="calculate()">Calculer total</button>
+
+    <div class="total" id="result">Total : 0 $</div>
+  </div>
 
 <script>
-let extras=[];
+  let extras = [];
 
-function round15(m){return Math.ceil(m/15)*15}
+  function addExtra() {
+    const select = document.getElementById("extraSelect");
+    const price = parseFloat(select.value);
+    const name = select.options[select.selectedIndex].text;
+    const qty = parseInt(document.getElementById("extraQty").value);
 
-function addExtra(){
-const sel=document.getElementById("extraSelect");
-if(!sel.value)return;
-extras.push({
-name:sel.options[sel.selectedIndex].text,
-price:parseFloat(sel.options[sel.selectedIndex].dataset.price),
-qty:parseInt(extraQty.value)
-});
-renderExtras();
-}
+    if (qty <= 0) return;
 
-function renderExtras(){
-extrasList.innerHTML="";
-extras.forEach(e=>{
-extrasList.innerHTML+=`${e.qty} × ${e.name}<br>`;
-});
-}
+    extras.push({ name, price, qty });
+    renderExtras();
+  }
 
-function calculate(){
-const rate=+rateInput.value||+rate.value;
-const s=new Date(`1970-01-01T${start.value}`);
-const e=new Date(`1970-01-01T${end.value}`);
-if(!start.value||!end.value)return;
+  function renderExtras() {
+    const list = document.getElementById("extrasList");
+    list.innerHTML = "";
+    extras.forEach(e => {
+      const div = document.createElement("div");
+      div.className = "extra-item";
+      div.innerHTML = `${e.qty} x ${e.name} = ${(e.price * e.qty).toFixed(2)} $`;
+      list.appendChild(div);
+    });
+  }
 
-let mins=round15((e-s)/60000);
-let workH=mins/60;
-let billH=Math.max(workH,3)+parseFloat(transport.value);
+  function calculate() {
+    const rate = parseFloat(document.getElementById("rate").value);
+    const hours = parseFloat(document.getElementById("hours").value);
+    const transport = parseFloat(document.getElementById("transport").value);
+    const deposit = parseFloat(document.getElementById("deposit").value);
 
-let extraSum=extras.reduce((t,e)=>t+e.price*e.qty,0);
-let sub=(rate*billH)+extraSum;
+    let subtotal = (rate * hours) + transport;
 
-let tps=0,tvq=0;
-if(taxMode.value==="with"){tps=sub*0.05;tvq=sub*0.09975}
+    extras.forEach(e => {
+      subtotal += e.price * e.qty;
+    });
 
-let total=sub+tps+tvq;
-let dep=+deposit.value;
-let grand=total-dep;
+    const tps = subtotal * 0.05;
+    const tvq = subtotal * 0.09975;
 
-workH.textContent=workH.toFixed(2)+" h";
-billH.textContent=billH.toFixed(2)+" h";
-sub.textContent=sub.toFixed(2)+" $";
-extraTotal.textContent=extraSum.toFixed(2)+" $";
-tps.textContent=tps.toFixed(2)+" $";
-tvq.textContent=tvq.toFixed(2)+" $";
-total.textContent=total.toFixed(2)+" $";
-dep.textContent="-"+dep.toFixed(2)+" $";
-grand.textContent=grand.toFixed(2)+" $";
-}
+    let total = subtotal + tps + tvq - deposit;
+
+    document.getElementById("result").innerText =
+      `Total à payer : ${total.toFixed(2)} $`;
+  }
 </script>
+
 </body>
-</html
+</html>
