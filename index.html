@@ -1,82 +1,159 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculatrice Colivex</title>
 
 <style>
-  body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; }
-  .container { max-width:520px; margin:16px auto; padding:15px; background:#fff; border-radius:12px; }
-  h2 { text-align:center; color:#0b3c5d; margin:8px 0 14px; }
-  label { font-weight:700; margin-top:10px; display:block; }
-  input, select, button { width:100%; padding:10px; margin-top:6px; border-radius:10px; border:1px solid #cfd6de; font-size:16px; box-sizing:border-box; }
-  button { background:#c4161c; color:#fff; border:none; margin-top:12px; font-weight:700; }
-  button:active { transform: scale(0.99); }
-
-  .row { display:flex; gap:8px; align-items:center; }
-  .row > * { flex:1; }
-
-  .cart { margin-top:10px; padding:10px; background:#f9fbfc; border:1px dashed #c8d3df; border-radius:10px; }
-  .cart-title { font-weight:800; color:#0b3c5d; margin-bottom:6px; }
-  .cart-item { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid #e6edf5; }
-  .cart-item:last-child { border-bottom:none; }
-  .cart-item small { color:#607083; }
-  .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#e8f1fb; color:#0b3c5d; font-size:12px; font-weight:700; }
-  .remove { background:#0b3c5d; color:#fff; border:none; padding:6px 10px; border-radius:10px; font-size:13px; width:auto; }
-  .remove:active { transform: scale(0.99); }
-  .right { text-align:right; }
-
-  .box { margin-top:15px; padding:15px; border-left:5px solid #0b3c5d; background:#f9fbfc; border-radius:10px; }
-  .line { display:flex; justify-content:space-between; margin:7px 0; }
-  .total { font-weight:900; font-size:18px; }
-  hr { border:none; border-top:1px solid #dfe7f0; margin:10px 0; }
-  .hint { font-size:13px; color:#5b6b7d; margin-top:8px; }
+body{font-family:Arial;background:#f4f6f8;margin:0}
+.container{max-width:520px;margin:auto;padding:15px;background:#fff;border-radius:12px}
+h2{text-align:center;color:#0b3c5d}
+label{font-weight:bold;margin-top:10px;display:block}
+input,select,button{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:1px solid #ccc;font-size:16px}
+button{background:#c4161c;color:#fff;border:none;margin-top:12px}
+.box{margin-top:15px;padding:15px;border-left:5px solid #0b3c5d;background:#f9fbfc;border-radius:8px}
+.line{display:flex;justify-content:space-between;margin:6px 0}
+.total{font-weight:bold;font-size:18px}
+.extra-row{display:flex;gap:6px;margin-top:6px}
+.small{font-size:13px;color:#555}
 </style>
 </head>
 
 <body>
 <div class="container">
-  <h2>Calculatrice terrain – Colivex</h2>
+<h2>Calculatrice terrain – Colivex</h2>
 
-  <label>Taux horaire ($)</label>
-  <input type="number" id="rate" value="155" min="0" step="1" />
+<label>Taux horaire ($)</label>
+<input type="number" id="rate" value="155">
 
-  <label>Heure d’arrivée</label>
-  <input type="time" id="start" />
+<label>Heure d’arrivée</label>
+<input type="time" id="start">
 
-  <label>Heure de départ</label>
-  <input type="time" id="end" />
+<label>Heure de départ</label>
+<input type="time" id="end">
 
-  <label>Transport (heures)</label>
-  <select id="transport">
-    <option value="0">0 h</option>
-    <option value="0.5">0.5 h</option>
-    <option value="1" selected>1 h</option>
-    <option value="1.5">1.5 h</option>
-    <option value="2">2 h</option>
-  </select>
+<label>Transport (heures)</label>
+<select id="transport">
+<option value="0">0 h</option>
+<option value="0.5">0.5 h</option>
+<option value="1" selected>1 h</option>
+<option value="1.5">1.5 h</option>
+</select>
 
-  <label>Extras (ajout multiple)</label>
-  <div class="row">
-    <select id="extraSelect">
-      <option value="">Choisir un article</option>
+<label>Extras (panier)</label>
+<div class="extra-row">
+<select id="extraSelect">
+<option value="">Choisir un article</option>
+<option data-price="2.5">Ruban adhésif (TAPE) – 2.50 $</option>
+<option data-price="6">Housse matelas 39" – 6.00 $</option>
+<option data-price="8">Housse matelas 60" – 8.00 $</option>
+<option data-price="11">Housse matelas 70" – 11.00 $</option>
+<option data-price="2.25">Boîte 1.5 pi³ – 2.25 $</option>
+<option data-price="2.75">Boîte 2 pi³ – 2.75 $</option>
+<option data-price="4.5">Boîte 4 pi³ – 4.50 $</option>
+<option data-price="5.5">Boîte 5 pi³ – 5.50 $</option>
+<option data-price="7">Boîte vaisselle – 7.00 $</option>
+<option data-price="7.5">Boîte abat-jour – 7.50 $</option>
+<option data-price="18.5">Boîte garde-robe – 18.50 $</option>
+<option data-price="0">Garde-robe NO CHARGE – 0.00 $</option>
+<option data-price="7.5">Boîte miroir/cadre (Inner) – 7.50 $</option>
+<option data-price="8.5">Boîte miroir/cadre (Outer) – 8.50 $</option>
+<option data-price="8.5">Papier bulles 5' – 8.50 $</option>
+<option data-price="8.5">Papier bulles 10' – 8.50 $</option>
+<option data-price="15">Papier emballage 10 lb – 15.00 $</option>
+<option data-price="27.5">Papier emballage 25 lb – 27.50 $</option>
+<option data-price="25">Couverture matelassée – 25.00 $</option>
+<option data-price="15">Couverture matelassée usagée – 15.00 $</option>
+<option data-price="18.5">Garde-robe usagée – 18.50 $</option>
+</select>
+<input type="number" id="extraQty" min="1" value="1">
+</div>
 
-      <option data-price="2.5">Ruban plastique adhésif 2 pouces (TAPE) — 2.50 $</option>
-      <option data-price="6">Housse matelas 39" (simple) — 6.00 $</option>
-      <option data-price="8">Housse matelas 60" (queen) — 8.00 $</option>
-      <option data-price="11">Housse matelas 70" (king) — 11.00 $</option>
+<button onclick="addExtra()">Ajouter l’extra</button>
+<div class="small" id="extrasList"></div>
 
-      <option data-price="2.25">Boîte 1.5 pieds cubes — 2.25 $</option>
-      <option data-price="2.75">Boîte 2 pieds cubes — 2.75 $</option>
-      <option data-price="4.5">Boîte 4 pieds cubes — 4.50 $</option>
-      <option data-price="5.5">Boîte 5 pieds cubes — 5.50 $</option>
+<label>Taxes</label>
+<select id="taxMode">
+<option value="with">Avec taxes</option>
+<option value="without">Sans taxes</option>
+</select>
 
-      <option data-price="7">Boîte à vaisselle — 7.00 $</option>
-      <option data-price="7.5">Boîte abat-jour — 7.50 $</option>
+<label>Dépôt (taxes incluses)</label>
+<select id="deposit">
+<option value="0">Aucun</option>
+<option value="250" selected>250 $</option>
+</select>
 
-      <option data-price="18.5">Boîte garde-robes (incl. barre) — 18.50 $</option>
-      <option data-price="0">GARDE-ROBES **NO CHARGE** — 0.00 $</option>
+<button onclick="calculate()">Calculer</button>
 
-      <option data-price="7.5">Boîte miroir/cadre (Inner) — 7.50 $</option>
-      <option data-price="8.5">Boîte miroir/cadre (Outer) — 8.50 $
+<div class="box">
+<div class="line"><span>Heures travaillées</span><strong id="workH">0.00 h</strong></div>
+<div class="line"><span>Heures facturables</span><strong id="billH">0.00 h</strong></div>
+<hr>
+<div class="line"><span>Sous-total</span><strong id="sub">0.00 $</strong></div>
+<div class="line"><span>Extras</span><strong id="extraTotal">0.00 $</strong></div>
+<div class="line"><span>TPS (5%)</span><strong id="tps">0.00 $</strong></div>
+<div class="line"><span>TVQ (9.975%)</span><strong id="tvq">0.00 $</strong></div>
+<div class="line total"><span>Total taxes incluses</span><span id="total">0.00 $</span></div>
+<div class="line"><span>Dépôt reçu</span><strong id="dep">-0.00 $</strong></div>
+<div class="line total"><span>Grand total à payer</span><span id="grand">0.00 $</span></div>
+</div>
+</div>
+
+<script>
+let extras=[];
+
+function round15(m){return Math.ceil(m/15)*15}
+
+function addExtra(){
+const sel=document.getElementById("extraSelect");
+if(!sel.value)return;
+extras.push({
+name:sel.options[sel.selectedIndex].text,
+price:parseFloat(sel.options[sel.selectedIndex].dataset.price),
+qty:parseInt(extraQty.value)
+});
+renderExtras();
+}
+
+function renderExtras(){
+extrasList.innerHTML="";
+extras.forEach(e=>{
+extrasList.innerHTML+=`${e.qty} × ${e.name}<br>`;
+});
+}
+
+function calculate(){
+const rate=+rateInput.value||+rate.value;
+const s=new Date(`1970-01-01T${start.value}`);
+const e=new Date(`1970-01-01T${end.value}`);
+if(!start.value||!end.value)return;
+
+let mins=round15((e-s)/60000);
+let workH=mins/60;
+let billH=Math.max(workH,3)+parseFloat(transport.value);
+
+let extraSum=extras.reduce((t,e)=>t+e.price*e.qty,0);
+let sub=(rate*billH)+extraSum;
+
+let tps=0,tvq=0;
+if(taxMode.value==="with"){tps=sub*0.05;tvq=sub*0.09975}
+
+let total=sub+tps+tvq;
+let dep=+deposit.value;
+let grand=total-dep;
+
+workH.textContent=workH.toFixed(2)+" h";
+billH.textContent=billH.toFixed(2)+" h";
+sub.textContent=sub.toFixed(2)+" $";
+extraTotal.textContent=extraSum.toFixed(2)+" $";
+tps.textContent=tps.toFixed(2)+" $";
+tvq.textContent=tvq.toFixed(2)+" $";
+total.textContent=total.toFixed(2)+" $";
+dep.textContent="-"+dep.toFixed(2)+" $";
+grand.textContent=grand.toFixed(2)+" $";
+}
+</script>
+</body>
+</html>
