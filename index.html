@@ -256,3 +256,112 @@ input, select, button{
     <div class="sectionTitle">Résumé</div>
 
     <div class="summaryBox">
+      <div class="summaryRow"><span>Sous-total (avant taxes)</span><strong id="subTotalTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>TPS (5 %)</span><strong id="tpsTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>TVQ (9,975 %)</span><strong id="tvqTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>Total (taxes incluses)</span><strong id="totalTxt" class="totalBig">0,00 $</strong></div>
+      <div class="summaryRow"><span>Dépôt reçu (–)</span><strong id="depositTxt">- 0,00 $</strong></div>
+      <div class="summaryRow"><span>Total à payer</span><strong id="payableTxt" class="totalBig">0,00 $</strong></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TPS = 0.05;
+const TVQ = 0.09975;
+const cart = [];
+
+const $ = (id) => document.getElementById(id);
+const money = (v) => (Number(v)||0).toLocaleString("fr-CA",{style:"currency",currency:"CAD"});
+
+function timeToMin(t){
+  if(!t || !t.includes(":")) return null;
+  const [h,m] = t.split(":").map(x => parseInt(x,10));
+  if(Number.isNaN(h) || Number.isNaN(m)) return null;
+  return h*60 + m;
+}
+
+function updateHours(){
+  const s = timeToMin($("startTime").value);
+  const e = timeToMin($("endTime").value);
+  if(s===null || e===null){ $("hoursWorked").value = ""; return; }
+  let diff = e - s;
+  if(diff < 0) diff += 1440; // passe minuit
+  const hours = Math.round((diff/60) * 100) / 100;
+  $("hoursWorked").value = hours;
+}
+
+function renderExtras(){
+  const div = $("extrasList");
+  div.innerHTML = "";
+  cart.forEach((item, i) => {
+    div.innerHTML += `
+      <div class="extraItem">
+        <div>${item.qty} × ${item.name}</div>
+        <button class="removeBtn" type="button" onclick="removeExtra(${i})">✕</button>
+      </div>`;
+  });
+  if(cart.length === 0){
+    div.innerHTML = `<div class="small">Aucun extra ajouté.</div>`;
+  }
+}
+
+function addExtra(){
+  const sel = $("extraSelect");
+  const name = sel.options[sel.selectedIndex].text;
+  const price = parseFloat(sel.value);
+  const qty = parseInt($("extraQty").value, 10);
+
+  if(!qty || qty <= 0){ alert("Quantité invalide"); return; }
+  cart.push({ name, price, qty });
+  renderExtras();
+}
+
+function removeExtra(i){
+  cart.splice(i, 1);
+  renderExtras();
+}
+
+function clearExtras(){
+  cart.length = 0;
+  renderExtras();
+}
+
+function calculate(){
+  updateHours();
+
+  const rate = parseFloat($("rate").value) || 0;
+  const hours = parseFloat($("hoursWorked").value) || 0;
+  const transportHours = parseFloat($("transportHours").value) || 0;
+  const deposit = parseFloat($("deposit").value) || 0;
+
+  let subTotal = (rate * hours) + (rate * transportHours);
+  cart.forEach(it => subTotal += (it.price * it.qty));
+
+  const tps = subTotal * TPS;
+  const tvq = subTotal * TVQ;
+  const total = subTotal + tps + tvq;
+  const payable = total - deposit;
+
+  $("subTotalTxt").textContent = money(subTotal);
+  $("tpsTxt").textContent = money(tps);
+  $("tvqTxt").textContent = money(tvq);
+  $("totalTxt").textContent = money(total);
+  $("depositTxt").textContent = "- " + money(deposit);
+  $("payableTxt").textContent = money(payable);
+
+  $("resultCard").style.display = "block";
+}
+
+$("startTime").addEventListener("input", updateHours);
+$("endTime").addEventListener("input", updateHours);
+$("addExtraBtn").addEventListener("click", addExtra);
+$("clearExtrasBtn").addEventListener("click", clearExtras);
+$("calcBtn").addEventListener("click", calculate);
+
+renderExtras();
+</script>
+
+</body>
+</html>
