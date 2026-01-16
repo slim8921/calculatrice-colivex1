@@ -1,241 +1,451 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Calculatrice Colivex</title>
 
-  <!-- Icône App (mets icon.png à la racine du repo) -->
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
-
   <style>
+    :root{
+      --blue:#0b4aa2;
+      --red:#d21f2b;
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --radius:14px;
+    }
+
+    *{ box-sizing:border-box; }
     body{
-      font-family: Arial, sans-serif;
-      background:#f5f7fb;
       margin:0;
-      padding:15px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-    .container{
-      max-width:420px;
-      margin:auto;
-      background:#fff;
-      padding:20px;
-      border-radius:14px;
-      box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+    .wrap{
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
     }
-    h1{
-      text-align:center;
-      color:#c4001a; /* Rouge Colivex */
+
+    .header{
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color:#fff;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .header h1{
       margin:0;
-      font-size:34px;
-      font-weight:900;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .2px;
     }
-    h2{
-      text-align:center;
-      color:#003b8e; /* Bleu Colivex */
-      margin:6px 0 18px;
-      font-size:16px;
-      font-weight:700;
+    .header p{
+      margin:6px 0 0 0;
+      opacity:.95;
+      font-size: 14px;
     }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width:560px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
     label{
-      font-weight:700;
       display:block;
-      margin-top:12px;
-      color:#111;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
     }
-    input, select{
+
+    input, select, button{
       width:100%;
-      padding:12px;
-      margin-top:6px;
-      font-size:16px;
-      border-radius:10px;
-      border:1px solid #d6dbe6;
-      box-sizing:border-box;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 12px;
+      font-size: 16px;
+      outline:none;
+      background:#fff;
     }
     input:focus, select:focus{
-      outline:none;
-      border-color:#003b8e;
-      box-shadow:0 0 0 3px rgba(0,59,142,.15);
+      border-color: rgba(11,74,162,.45);
+      box-shadow: 0 0 0 3px rgba(11,74,162,.12);
     }
-    button{
-      width:100%;
-      padding:14px;
-      margin-top:14px;
-      border:none;
-      border-radius:12px;
-      font-size:16px;
-      font-weight:900;
-      color:#fff;
-      background:#003b8e; /* Bleu Colivex */
-    }
-    .btn-add{
-      background:#c4001a; /* Rouge Colivex */
-    }
-    hr{
-      border:none;
-      border-top:1px solid #e6e9f2;
-      margin:16px 0;
-    }
-    .extras-box{
-      background:#f1f3f8;
-      padding:12px;
-      border-radius:12px;
-      margin-top:10px;
-      border:1px solid #e4e7f0;
-    }
-    .extras-title{
-      font-weight:900;
-      color:#003b8e;
-      margin-bottom:6px;
-    }
-    .extra-item{
-      display:flex;
-      justify-content:space-between;
-      background:#fff;
-      padding:10px;
-      border-radius:8px;
-      border:1px solid #e4e7f0;
-      margin-bottom:6px;
-      font-size:14px;
-    }
-    .muted{
-      color:#6b7280;
-      font-style:italic;
-      font-size:14px;
-    }
-    .summary{
-      margin-top:14px;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid #e4e7f0;
-      background:#fff;
-    }
+
     .row{
       display:flex;
-      justify-content:space-between;
-      font-size:14px;
-      margin-bottom:6px;
+      gap:10px;
+      align-items: end;
+      flex-wrap: wrap;
     }
-    .total{
-      margin-top:16px;
-      padding:16px;
-      background:linear-gradient(135deg,#003b8e,#001f5c);
+    .row > div{ flex:1; min-width: 160px; }
+    .row .small{ min-width: 120px; flex:0 0 120px; }
+    .row .btnCol{ min-width: 140px; flex:0 0 140px; }
+
+    .btn{
+      cursor:pointer;
+      font-weight: 800;
+      border:none;
       color:#fff;
-      border-radius:14px;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .btnSecondary{
+      cursor:pointer;
+      font-weight: 800;
+      background:#fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .muted{ color: var(--muted); font-size: 13px; }
+
+    .extrasList{
+      margin-top: 10px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .extraItem{
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      background:#fff;
+    }
+
+    .extraLeft{
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .extraName{
+      font-weight: 800;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 360px;
+    }
+    .extraMeta{
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .extraRight{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex:0 0 auto;
+    }
+
+    .pill{
+      font-weight: 900;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+      font-size: 13px;
+      min-width: 92px;
       text-align:center;
-      font-size:20px;
-      font-weight:900;
+    }
+
+    .removeBtn{
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .totals{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .line{
+      display:flex;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+    .line strong{ font-size: 16px; }
+    .totalBox{
+      border: 2px solid rgba(11,74,162,.18);
+      background: rgba(11,74,162,.06);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .dangerNote{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Transport Colivex</h1>
-    <h2>Calculatrice de facture</h2>
-
-    <label>Tarif horaire ($)</label>
-    <input type="number" id="rate" value="145">
-
-    <label>Heures travaillées</label>
-    <input type="number" id="hours" step="0.25" placeholder="ex: 6.5">
-
-    <label>Frais de transport (1h)</label>
-    <input type="number" id="transport" value="145">
-
-    <label>Dépôt reçu (taxes incluses)</label>
-    <input type="number" id="deposit" value="250">
-
-    <hr>
-
-    <label>Extras</label>
-    <select id="extraSelect">
-      <option value="10">Sac à matelas – 10 $</option>
-      <option value="2.5">Tape – 2.50 $</option>
-      <option value="20">Boîte garde-robe – 20 $</option>
-      <option value="50">Boîte TV – 50 $</option>
-      <option value="0">Autre extra – 0 $</option>
-    </select>
-
-    <label>Quantité</label>
-    <input type="number" id="extraQty" value="1" min="1">
-
-    <button class="btn-add" onclick="addExtra()">Ajouter l’extra</button>
-
-    <div class="extras-box">
-      <div class="extras-title">Extras ajoutés</div>
-      <div id="extrasList" class="muted">Aucun extra ajouté</div>
+  <div class="wrap">
+    <div class="header">
+      <h1>Transport Colivex</h1>
+      <p>Calculatrice de facture (TPS/TVQ + Dépôt + Extras panier)</p>
     </div>
 
-    <button onclick="calculate()">Calculer total</button>
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label for="rate">Tarif horaire ($)</label>
+          <input id="rate" type="number" inputmode="decimal" value="145" min="0" step="0.01" />
+        </div>
 
-    <div class="summary" id="summary" style="display:none;">
-      <div class="row"><span>Sous-total</span><span id="subTotal">0.00 $</span></div>
-      <div class="row"><span>TPS (5%)</span><span id="tps">0.00 $</span></div>
-      <div class="row"><span>TVQ (9.975%)</span><span id="tvq">0.00 $</span></div>
-      <div class="row"><span>Dépôt</span><span id="dep">-0.00 $</span></div>
+        <div>
+          <label for="hours">Heures travaillées</label>
+          <input id="hours" type="number" inputmode="decimal" placeholder="Ex: 6.5" min="0" step="0.25" />
+        </div>
+
+        <div>
+          <label for="transportHours">Frais transport (heures)</label>
+          <input id="transportHours" type="number" inputmode="decimal" value="1" min="0" step="0.25" />
+          <div class="muted">Par défaut : 1h (modifie si besoin)</div>
+        </div>
+
+        <div>
+          <label for="deposit">Dépôt reçu (taxes incluses) — $</label>
+          <input id="deposit" type="number" inputmode="decimal" value="250" min="0" step="0.01" />
+          <div class="muted">On soustrait ce montant au total final</div>
+        </div>
+      </div>
     </div>
 
-    <div class="total" id="result">Total à payer : 0.00 $</div>
+    <div class="card">
+      <h2 style="margin:0 0 10px 0; font-size:16px;">Extras (panier)</h2>
+
+      <div class="row">
+        <div>
+          <label for="extraSelect">Choisir un extra</label>
+          <select id="extraSelect">
+            <option value="10" data-name="Sac à matelas">Sac à matelas — 10 $</option>
+            <option value="2.5" data-name="Tape">Tape — 2,50 $</option>
+            <option value="20" data-name="Boîte garde-robe">Boîte garde-robe — 20 $</option>
+            <option value="50" data-name="Boîte TV">Boîte TV — 50 $</option>
+            <option value="custom" data-name="Autre extra">Autre extra (prix libre)</option>
+          </select>
+        </div>
+
+        <div class="small">
+          <label for="extraQty">Qté</label>
+          <input id="extraQty" type="number" value="1" min="1" step="1" />
+        </div>
+
+        <div class="btnCol">
+          <label>&nbsp;</label>
+          <button class="btn" type="button" id="addExtraBtn">Ajouter</button>
+        </div>
+
+        <div class="btnCol">
+          <label>&nbsp;</label>
+          <button class="btnSecondary" type="button" id="clearExtrasBtn">Vider extras</button>
+        </div>
+      </div>
+
+      <div class="extrasList" id="extrasContainer"></div>
+      <div class="dangerNote">Astuce : si tu as mis un item de trop, clique sur ❌ pour l’enlever.</div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:10px;">
+        <div class="btnCol" style="flex:1;">
+          <button class="btn" type="button" id="calcBtn">Calculer total</button>
+        </div>
+        <div class="btnCol" style="flex:1;">
+          <button class="btnSecondary" type="button" id="resetBtn">Nouvelle facture</button>
+        </div>
+      </div>
+
+      <div class="totals" id="summary" style="display:none;">
+        <div class="line"><span>Sous-total</span><strong id="subTotal">$0.00</strong></div>
+        <div class="line"><span>TPS (5%)</span><strong id="tps">$0.00</strong></div>
+        <div class="line"><span>TVQ (9.975%)</span><strong id="tvq">$0.00</strong></div>
+        <div class="line"><span>Dépôt (taxes incluses)</span><strong id="dep">-$0.00</strong></div>
+
+        <div class="totalBox">
+          <div class="line"><span><strong>Total à payer</strong></span><strong id="result">$0.00</strong></div>
+        </div>
+      </div>
+    </div>
   </div>
 
-<script>
-  let extras = [];
+  <script>
+    // --- Paramètres taxes (Québec)
+    const TPS_RATE = 0.05;
+    const TVQ_RATE = 0.09975;
 
-  function money(n){
-    return (Math.round(n * 100) / 100).toFixed(2);
-  }
+    // --- Panier extras
+    const extrasList = [];
 
-  function addExtra(){
-    const select = document.getElementById("extraSelect");
-    const name = select.options[select.selectedIndex].text;
-    const price = parseFloat(select.value) || 0;
-    const qty = parseInt(document.getElementById("extraQty").value) || 1;
+    const $ = (id) => document.getElementById(id);
 
-    extras.push({name, price, qty});
-    renderExtras();
-  }
-
-  function renderExtras(){
-    const box = document.getElementById("extrasList");
-    box.innerHTML = "";
-
-    if(extras.length === 0){
-      box.innerHTML = "Aucun extra ajouté";
-      box.className = "muted";
-      return;
+    function money(n){
+      const v = Number(n || 0);
+      return v.toLocaleString("fr-CA", { style:"currency", currency:"CAD" });
     }
 
-    extras.forEach(e=>{
-      const div = document.createElement("div");
-      div.className = "extra-item";
-      div.innerHTML = `<span>${e.qty} × ${e.name}</span><span>${money(e.qty*e.price)} $</span>`;
-      box.appendChild(div);
+    function getExtrasTotal(){
+      return extrasList.reduce((sum, e) => sum + (e.price * e.qty), 0);
+    }
+
+    function renderExtras(){
+      const container = $("extrasContainer");
+      container.innerHTML = "";
+
+      if (extrasList.length === 0){
+        container.innerHTML = `<div class="muted">Aucun extra ajouté.</div>`;
+        return;
+      }
+
+      extrasList.forEach((e, index) => {
+        const totalItem = e.price * e.qty;
+
+        const div = document.createElement("div");
+        div.className = "extraItem";
+        div.innerHTML = `
+          <div class="extraLeft">
+            <div class="extraName">${e.name}</div>
+            <div class="extraMeta">${e.qty} × ${money(e.price)} = <strong>${money(totalItem)}</strong></div>
+          </div>
+          <div class="extraRight">
+            <div class="pill">${money(totalItem)}</div>
+            <button class="removeBtn" type="button" aria-label="Supprimer">✕</button>
+          </div>
+        `;
+
+        div.querySelector(".removeBtn").addEventListener("click", () => {
+          extrasList.splice(index, 1);
+          renderExtras();
+        });
+
+        container.appendChild(div);
+      });
+    }
+
+    function addExtra(){
+      const select = $("extraSelect");
+      const qty = parseInt($("extraQty").value, 10);
+
+      if (!qty || qty <= 0) {
+        alert("Quantité invalide.");
+        return;
+      }
+
+      const selectedOption = select.options[select.selectedIndex];
+      const type = select.value;
+
+      let name = selectedOption.getAttribute("data-name") || selectedOption.text;
+      let price = 0;
+
+      if (type === "custom"){
+        const customName = prompt("Nom de l'extra ?");
+        const customPrice = prompt("Prix de l'extra ($) ?");
+
+        if (!customName) return;
+
+        price = parseFloat(customPrice);
+        if (isNaN(price) || price < 0){
+          alert("Prix invalide.");
+          return;
+        }
+        name = customName.trim();
+      } else {
+        price = parseFloat(type);
+        if (isNaN(price) || price < 0){
+          alert("Prix invalide.");
+          return;
+        }
+      }
+
+      extrasList.push({ name, price, qty });
+      $("extraQty").value = 1;
+      renderExtras();
+    }
+
+    function calculateTotal(){
+      const rate = parseFloat($("rate").value) || 0;
+      const hours = parseFloat($("hours").value) || 0;
+      const transportHours = parseFloat($("transportHours").value) || 0;
+      const deposit = parseFloat($("deposit").value) || 0;
+
+      const labor = rate * hours;
+      const transport = rate * transportHours;
+      const extrasTotal = getExtrasTotal();
+
+      const subtotal = labor + transport + extrasTotal;
+      const tps = subtotal * TPS_RATE;
+      const tvq = subtotal * TVQ_RATE;
+
+      const total = subtotal + tps + tvq - deposit;
+
+      $("summary").style.display = "block";
+      $("subTotal").innerText = money(subtotal);
+      $("tps").innerText = money(tps);
+      $("tvq").innerText = money(tvq);
+      $("dep").innerText = "-" + money(deposit);
+      $("result").innerText = money(total);
+    }
+
+    function resetAll(){
+      $("rate").value = 145;
+      $("hours").value = "";
+      $("transportHours").value = 1;
+      $("deposit").value = 250;
+
+      extrasList.length = 0;
+      renderExtras();
+
+      $("summary").style.display = "none";
+      $("subTotal").innerText = money(0);
+      $("tps").innerText = money(0);
+      $("tvq").innerText = money(0);
+      $("dep").innerText = "-" + money(0);
+      $("result").innerText = money(0);
+    }
+
+    // Events
+    $("addExtraBtn").addEventListener("click", addExtra);
+    $("clearExtrasBtn").addEventListener("click", () => {
+      extrasList.length = 0;
+      renderExtras();
     });
-  }
+    $("calcBtn").addEventListener("click", calculateTotal);
+    $("resetBtn").addEventListener("click", resetAll);
 
-  function calculate(){
-    const rate = parseFloat(document.getElementById("rate").value) || 0;
-    const hours = parseFloat(document.getElementById("hours").value) || 0;
-    const transport = parseFloat(document.getElementById("transport").value) || 0;
-    const deposit = parseFloat(document.getElementById("deposit").value) || 0;
-
-    let subtotal = (rate * hours) + transport;
-    extras.forEach(e => subtotal += e.price * e.qty);
-
-    const tps = subtotal * 0.05;
-    const tvq = subtotal * 0.09975;
-    const total = subtotal + tps + tvq - deposit;
-
-    document.getElementById("summary").style.display = "block";
-    document.getElementById("subTotal").innerText = money(subtotal) + " $";
-    document.getElementById("tps").innerText = money(tps) + " $";
-    document.getElementById("tvq").innerText = money(tvq) + " $";
-    document.getElementById("dep").innerText = "-" + money(deposit) + " $";
-    document.getElementById("result").innerText = "Total à payer : " + money(total) + " $";
-  }
-</script>
-
+    // Init
+    renderExtras();
+  </script>
 </body>
 </html>
