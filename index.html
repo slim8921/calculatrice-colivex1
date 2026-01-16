@@ -7,13 +7,12 @@
 
 <style>
 :root{
-  /* STYLE EXACT PHOTO (bleu foncé + rouge) */
-  --blue:#1f4e79;     /* bleu des titres / cadres */
-  --blue2:#163a5b;    /* bleu plus foncé pour bordures */
-  --red:#c00000;      /* rouge bouton Calculer */
+  --red:#c00000;      /* ROUGE DOMINANT */
+  --redDark:#a00000;
+  --blue:#1f4e79;     /* Accent seulement */
   --bg:#ffffff;
-  --border:#d9dde3;
-  --soft:#f6f7f9;
+  --border:#d6d6d6;
+  --soft:#f7f7f7;
 }
 
 *{box-sizing:border-box}
@@ -23,25 +22,26 @@ body{
   background:var(--bg);
   color:#111;
 }
+
 .container{
   max-width:760px;
   margin:0 auto;
   padding:14px;
 }
 
-/* Bandeau bleu (comme dans la photo) */
+/* BARRE ROUGE (DOMINANTE) */
 .topBar{
-  background:var(--blue);
+  background:var(--red);
   color:#fff;
-  border-radius:10px;
-  padding:14px 12px;
-  text-align:center;
   font-weight:900;
   font-size:18px;
+  text-align:center;
+  padding:14px;
+  border-radius:10px;
   margin-bottom:12px;
 }
 
-/* Cartes */
+/* CARTES */
 .card{
   border:1px solid var(--border);
   border-radius:10px;
@@ -50,9 +50,9 @@ body{
   margin-bottom:12px;
 }
 
-/* Titres de section bleu */
+/* TITRES SECTIONS ROUGES */
 .sectionTitle{
-  background:var(--blue);
+  background:var(--red);
   color:#fff;
   font-weight:900;
   padding:10px 12px;
@@ -60,13 +60,13 @@ body{
   margin:-14px -14px 12px -14px;
 }
 
-/* Champs */
+/* CHAMPS */
 label{
   font-weight:800;
   font-size:14px;
   display:block;
   margin-top:10px;
-  color:#0f2b45;
+  color:var(--redDark);
 }
 input, select, button{
   width:100%;
@@ -78,7 +78,7 @@ input, select, button{
   background:#fff;
 }
 
-/* Grille */
+/* GRILLE */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -88,7 +88,7 @@ input, select, button{
   .grid{grid-template-columns:1fr;}
 }
 
-/* Gros bouton rouge Calculer (comme photo) */
+/* BOUTONS */
 .btnCalc{
   background:var(--red);
   color:#fff;
@@ -99,39 +99,18 @@ input, select, button{
   border-radius:10px;
   cursor:pointer;
 }
+.btnCalc:active{background:var(--redDark);}
 
-/* Boutons bleus */
-.btnBlue{
-  background:var(--blue);
-  color:#fff;
-  border:none;
-  font-weight:900;
+.btnAlt{
+  background:#fff;
+  color:var(--red);
+  border:2px solid var(--red);
+  font-weight:800;
   border-radius:10px;
   cursor:pointer;
 }
 
-/* Résumé style photo (cadre bleu) */
-.summaryBox{
-  border:2px solid var(--blue);
-  border-radius:12px;
-  padding:14px;
-  background:#fff;
-}
-.summaryRow{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:8px 0;
-  border-bottom:1px solid var(--border);
-}
-.summaryRow:last-child{border-bottom:none;}
-.summaryRow strong{font-size:16px;}
-.totalBig{
-  font-size:18px;
-  font-weight:900;
-}
-
-/* Extras liste */
+/* EXTRAS */
 .extraItem{
   display:flex;
   justify-content:space-between;
@@ -141,7 +120,6 @@ input, select, button{
   padding:10px;
   margin-top:8px;
   background:#fff;
-  gap:10px;
 }
 .removeBtn{
   width:40px;
@@ -151,11 +129,32 @@ input, select, button{
   background:#fff;
   font-size:18px;
   cursor:pointer;
+  color:var(--red);
 }
+
+/* RÉSUMÉ */
+.summaryBox{
+  border:2px solid var(--red);
+  border-radius:12px;
+  padding:14px;
+  background:#fff;
+}
+.summaryRow{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+}
+.summaryRow:last-child{border-bottom:none;}
+.totalBig{
+  font-size:18px;
+  font-weight:900;
+  color:var(--red);
+}
+
 .small{
   font-size:13px;
-  color:#445;
-  margin-top:6px;
+  color:#555;
 }
 </style>
 </head>
@@ -165,50 +164,43 @@ input, select, button{
 
   <div class="topBar">Calculatrice Transport Colivex</div>
 
-  <!-- SECTION HEURES AUTO -->
+  <!-- HEURES -->
   <div class="card">
-    <div class="sectionTitle">Heures</div>
+    <div class="sectionTitle">Heures de travail</div>
 
     <div class="grid">
       <div>
         <label>Heure d’arrivée</label>
         <input id="startTime" type="time">
       </div>
-
       <div>
         <label>Heure de départ</label>
         <input id="endTime" type="time">
       </div>
-
       <div>
         <label>Heures travaillées (auto)</label>
-        <input id="hoursWorked" type="number" step="0.01" readonly>
+        <input id="hoursWorked" type="number" readonly>
         <div class="small">Calcul automatique (gère minuit)</div>
       </div>
-
       <div>
         <label>Tarif horaire ($)</label>
-        <input id="rate" type="number" value="145" step="0.01" min="0">
+        <input id="rate" type="number" value="145">
       </div>
-
       <div>
         <label>Frais transport (heures)</label>
-        <input id="transportHours" type="number" value="1" step="0.25" min="0">
-        <div class="small">Par défaut : 1h</div>
+        <input id="transportHours" type="number" value="1" step="0.25">
       </div>
-
       <div>
-        <label>Dépôt reçu (taxes incluses)</label>
-        <input id="deposit" type="number" value="250" step="0.01" min="0">
+        <label>Dépôt reçu (tx incluses)</label>
+        <input id="deposit" type="number" value="250">
       </div>
     </div>
   </div>
 
-  <!-- SECTION EXTRAS -->
+  <!-- EXTRAS -->
   <div class="card">
     <div class="sectionTitle">Ajouter des extras</div>
 
-    <label>Choisir un extra</label>
     <select id="extraSelect">
       <option value="2.5">Ruban adhésif 2 pouces (TAPE) — 2,50 $</option>
       <option value="6">Housse à matelas 39" (simple) — 6,00 $</option>
@@ -224,10 +216,9 @@ input, select, button{
       <option value="0">GARDE-ROBES **NO CHARGE** — 0,00 $</option>
       <option value="7.5">Boîte miroir / cadre (Inner) — 7,50 $</option>
       <option value="8.5">Boîte miroir / cadre (Outer) — 8,50 $</option>
-      <option value="8.5">Rouleau papier bulles 1/2" x 48" x 5' — 8,50 $</option>
-      <option value="8.5">Rouleau papier bulles 3/16" x 48" x 10' — 8,50 $</option>
-      <option value="15">Papier d'emballage 10 livres — 15,00 $</option>
-      <option value="27.5">Papier d'emballage 25 livres — 27,50 $</option>
+      <option value="8.5">Rouleau papier bulles — 8,50 $</option>
+      <option value="15">Papier d'emballage 10 lb — 15,00 $</option>
+      <option value="27.5">Papier d'emballage 25 lb — 27,50 $</option>
       <option value="25">Couverture matelassée — 25,00 $</option>
       <option value="15">Couverture matelassée (usagée) — 15,00 $</option>
       <option value="18.5">Garde-Robes usagée — 18,50 $</option>
@@ -236,31 +227,30 @@ input, select, button{
     <div class="grid">
       <div>
         <label>Quantité</label>
-        <input id="extraQty" type="number" value="1" min="1" step="1">
+        <input id="extraQty" type="number" value="1" min="1">
       </div>
       <div style="align-self:end;">
-        <button class="btnBlue" type="button" id="addExtraBtn">Ajouter</button>
+        <button class="btnAlt" type="button" id="addExtraBtn">Ajouter</button>
       </div>
     </div>
 
-    <button class="btnBlue" type="button" id="clearExtrasBtn" style="margin-top:10px;">Vider extras</button>
+    <button class="btnAlt" type="button" id="clearExtrasBtn" style="margin-top:10px;">Vider extras</button>
 
     <div id="extrasList"></div>
   </div>
 
-  <!-- BOUTON CALCULER -->
+  <!-- CALCULER -->
   <button class="btnCalc" type="button" id="calcBtn">Calculer</button>
 
-  <!-- RÉSULTATS -->
-  <div class="card" id="resultCard" style="display:none; margin-top:12px;">
+  <!-- RÉSULTAT -->
+  <div class="card" id="resultCard" style="display:none;">
     <div class="sectionTitle">Résumé</div>
 
     <div class="summaryBox">
-      <div class="summaryRow"><span>Sous-total (avant taxes)</span><strong id="subTotalTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>Sous-total</span><strong id="subTotalTxt">0,00 $</strong></div>
       <div class="summaryRow"><span>TPS (5 %)</span><strong id="tpsTxt">0,00 $</strong></div>
       <div class="summaryRow"><span>TVQ (9,975 %)</span><strong id="tvqTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>Total (taxes incluses)</span><strong id="totalTxt" class="totalBig">0,00 $</strong></div>
-      <div class="summaryRow"><span>Dépôt reçu (–)</span><strong id="depositTxt">- 0,00 $</strong></div>
+      <div class="summaryRow"><span>Dépôt reçu</span><strong id="depositTxt">- 0,00 $</strong></div>
       <div class="summaryRow"><span>Total à payer</span><strong id="payableTxt" class="totalBig">0,00 $</strong></div>
     </div>
   </div>
@@ -272,93 +262,55 @@ const TPS = 0.05;
 const TVQ = 0.09975;
 const cart = [];
 
-const $ = (id) => document.getElementById(id);
-const money = (v) => (Number(v)||0).toLocaleString("fr-CA",{style:"currency",currency:"CAD"});
+const $ = id => document.getElementById(id);
+const money = v => (Number(v)||0).toLocaleString("fr-CA",{style:"currency",currency:"CAD"});
 
 function timeToMin(t){
-  if(!t || !t.includes(":")) return null;
-  const [h,m] = t.split(":").map(x => parseInt(x,10));
-  if(Number.isNaN(h) || Number.isNaN(m)) return null;
-  return h*60 + m;
+  if(!t||!t.includes(":"))return null;
+  const[a,b]=t.split(":").map(Number);
+  return a*60+b;
 }
-
 function updateHours(){
-  const s = timeToMin($("startTime").value);
-  const e = timeToMin($("endTime").value);
-  if(s===null || e===null){ $("hoursWorked").value = ""; return; }
-  let diff = e - s;
-  if(diff < 0) diff += 1440; // passe minuit
-  const hours = Math.round((diff/60) * 100) / 100;
-  $("hoursWorked").value = hours;
+  const s=timeToMin($("startTime").value);
+  const e=timeToMin($("endTime").value);
+  if(s===null||e===null)return;
+  let d=e-s; if(d<0)d+=1440;
+  $("hoursWorked").value=Math.round((d/60)*100)/100;
 }
 
 function renderExtras(){
-  const div = $("extrasList");
-  div.innerHTML = "";
-  cart.forEach((item, i) => {
-    div.innerHTML += `
-      <div class="extraItem">
-        <div>${item.qty} × ${item.name}</div>
-        <button class="removeBtn" type="button" onclick="removeExtra(${i})">✕</button>
-      </div>`;
+  const d=$("extrasList"); d.innerHTML="";
+  cart.forEach((it,i)=>{
+    d.innerHTML+=`<div class="extraItem">${it.qty} × ${it.name}<button class="removeBtn" onclick="removeExtra(${i})">✕</button></div>`;
   });
-  if(cart.length === 0){
-    div.innerHTML = `<div class="small">Aucun extra ajouté.</div>`;
-  }
+  if(!cart.length)d.innerHTML='<div class="small">Aucun extra ajouté</div>';
 }
-
 function addExtra(){
-  const sel = $("extraSelect");
-  const name = sel.options[sel.selectedIndex].text;
-  const price = parseFloat(sel.value);
-  const qty = parseInt($("extraQty").value, 10);
-
-  if(!qty || qty <= 0){ alert("Quantité invalide"); return; }
-  cart.push({ name, price, qty });
+  const sel=$("extraSelect");
+  cart.push({name:sel.options[sel.selectedIndex].text,price:+sel.value,qty:+$("extraQty").value});
   renderExtras();
 }
-
-function removeExtra(i){
-  cart.splice(i, 1);
-  renderExtras();
-}
-
-function clearExtras(){
-  cart.length = 0;
-  renderExtras();
-}
+function removeExtra(i){cart.splice(i,1);renderExtras();}
+function clearExtras(){cart.length=0;renderExtras();}
 
 function calculate(){
   updateHours();
-
-  const rate = parseFloat($("rate").value) || 0;
-  const hours = parseFloat($("hoursWorked").value) || 0;
-  const transportHours = parseFloat($("transportHours").value) || 0;
-  const deposit = parseFloat($("deposit").value) || 0;
-
-  let subTotal = (rate * hours) + (rate * transportHours);
-  cart.forEach(it => subTotal += (it.price * it.qty));
-
-  const tps = subTotal * TPS;
-  const tvq = subTotal * TVQ;
-  const total = subTotal + tps + tvq;
-  const payable = total - deposit;
-
-  $("subTotalTxt").textContent = money(subTotal);
-  $("tpsTxt").textContent = money(tps);
-  $("tvqTxt").textContent = money(tvq);
-  $("totalTxt").textContent = money(total);
-  $("depositTxt").textContent = "- " + money(deposit);
-  $("payableTxt").textContent = money(payable);
-
-  $("resultCard").style.display = "block";
+  let sub=(+$("rate").value * +$("hoursWorked").value) + (+$("rate").value * +$("transportHours").value);
+  cart.forEach(i=>sub+=i.price*i.qty);
+  const tps=sub*TPS, tvq=sub*TVQ;
+  $("subTotalTxt").textContent=money(sub);
+  $("tpsTxt").textContent=money(tps);
+  $("tvqTxt").textContent=money(tvq);
+  $("depositTxt").textContent="- "+money($("deposit").value);
+  $("payableTxt").textContent=money(sub+tps+tvq-$("deposit").value);
+  $("resultCard").style.display="block";
 }
 
-$("startTime").addEventListener("input", updateHours);
-$("endTime").addEventListener("input", updateHours);
-$("addExtraBtn").addEventListener("click", addExtra);
-$("clearExtrasBtn").addEventListener("click", clearExtras);
-$("calcBtn").addEventListener("click", calculate);
+$("startTime").oninput=updateHours;
+$("endTime").oninput=updateHours;
+$("addExtraBtn").onclick=addExtra;
+$("clearExtrasBtn").onclick=clearExtras;
+$("calcBtn").onclick=calculate;
 
 renderExtras();
 </script>
