@@ -154,7 +154,11 @@ input, select, button{
   font-weight:900;
   color:var(--red);
 }
-
+.grandTotal{
+  font-size:22px;
+  font-weight:900;
+  color:var(--red);
+}
 .small{font-size:13px;color:#555;}
 </style>
 </head>
@@ -236,9 +240,11 @@ input, select, button{
 
     <div class="summaryBox">
       <div class="summaryRow"><span>Sous-total</span><strong id="subTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>TPS</span><strong id="tpsTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>TVQ</span><strong id="tvqTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>Total à payer</span><strong id="totalTxt" class="totalBig">0,00 $</strong></div>
+      <div class="summaryRow"><span>TPS (5 %)</span><strong id="tpsTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>TVQ (9,975 %)</span><strong id="tvqTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>Total taxes incluses</span><strong id="totalTaxesTxt">0,00 $</strong></div>
+      <div class="summaryRow"><span>Dépôt reçu (tx incluses)</span><strong id="depositTxt">- 250,00 $</strong></div>
+      <div class="summaryRow"><span>Grand total à payer</span><strong id="grandTotalTxt" class="grandTotal">0,00 $</strong></div>
     </div>
   </div>
 
@@ -268,12 +274,32 @@ function renderExtras(){
 
 function calculate(){
   updateHours();
+
+  // Sous-total AVANT taxes (main-d'oeuvre + transport + extras)
   let sub=(rate.value*hoursWorked.value)+(rate.value*transportHours.value);
   cart.forEach(i=>sub+=i.price*i.qty);
-  subTxt.textContent=money(sub);
-  tpsTxt.textContent=money(sub*TPS);
-  tvqTxt.textContent=money(sub*TVQ);
-  totalTxt.textContent=money(sub+sub*TPS+sub*TVQ-deposit.value);
+
+  // Taxes séparées
+  const tps = sub * TPS;
+  const tvq = sub * TVQ;
+
+  // Total taxes incluses
+  const totalTaxes = sub + tps + tvq;
+
+  // Dépôt (tx incluses) soustrait APRÈS taxes
+  const dep = Number(deposit.value) || 0;
+
+  // Grand total
+  const grandTotal = Math.max(0, totalTaxes - dep);
+
+  // Affichage
+  subTxt.textContent = money(sub);
+  tpsTxt.textContent = money(tps);
+  tvqTxt.textContent = money(tvq);
+  totalTaxesTxt.textContent = money(totalTaxes);
+  depositTxt.textContent = "- " + money(dep);
+  grandTotalTxt.textContent = money(grandTotal);
+
   resultCard.style.display="block";
 }
 
@@ -282,4 +308,4 @@ renderExtras();
 </script>
 
 </body>
-</html
+</html>
