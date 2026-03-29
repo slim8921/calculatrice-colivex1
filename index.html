@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculatrice Colivex</title>
-
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f7fb;
       margin: 0;
       padding: 20px;
-      color: #111;
     }
 
     .container {
       max-width: 1000px;
-      margin: 0 auto;
-      background: #fff;
+      margin: auto;
+      background: white;
       padding: 20px;
       border-radius: 14px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
@@ -27,18 +25,16 @@
       text-align: center;
       color: #c40000;
       margin-top: 0;
-      margin-bottom: 20px;
     }
 
     h2 {
       color: #0b4ea2;
       margin-top: 25px;
-      margin-bottom: 10px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
       gap: 12px;
       margin-bottom: 18px;
     }
@@ -53,8 +49,8 @@
     input, select {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
       border-radius: 8px;
+      border: 1px solid #ccc;
       box-sizing: border-box;
       font-size: 16px;
     }
@@ -63,24 +59,21 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 15px;
+      margin-top: 14px;
     }
 
     button {
-      padding: 12px 18px;
+      background: #c40000;
+      color: white;
       border: none;
+      padding: 12px 18px;
       border-radius: 8px;
-      font-size: 16px;
       font-weight: bold;
-      color: #fff;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    .btn-red {
-      background: #c40000;
-    }
-
-    .btn-blue {
+    button.secondary {
       background: #0b4ea2;
     }
 
@@ -91,7 +84,7 @@
     }
 
     th, td {
-      border: 1px solid #000;
+      border: 1px solid black;
       padding: 8px;
     }
 
@@ -119,17 +112,16 @@
       padding: 15px;
       border: 2px solid #ddd;
       border-radius: 10px;
-      background: #fafafa;
     }
 
     .results div {
       display: flex;
       justify-content: space-between;
-      margin: 7px 0;
+      margin: 6px 0;
       font-size: 18px;
     }
 
-    .grand-total {
+    .total {
       font-size: 24px !important;
       color: #c40000;
       font-weight: bold;
@@ -156,7 +148,7 @@
         font-size: 16px;
       }
 
-      .grand-total {
+      .total {
         font-size: 20px !important;
       }
     }
@@ -168,28 +160,28 @@
 
     <div class="grid">
       <div class="field">
-        <label for="tauxHoraire">Taux horaire ($)</label>
-        <input type="number" id="tauxHoraire" value="165" step="0.01">
+        <label for="taux">Taux horaire ($)</label>
+        <input type="number" id="taux" value="165" step="0.01">
       </div>
 
       <div class="field">
-        <label for="heureArrivee">Heure d’arrivée</label>
-        <input type="time" id="heureArrivee">
+        <label for="arrivee">Heure d’arrivée</label>
+        <input type="time" id="arrivee">
       </div>
 
       <div class="field">
-        <label for="heureDepart">Heure de départ</label>
-        <input type="time" id="heureDepart">
+        <label for="depart">Heure de départ</label>
+        <input type="time" id="depart">
       </div>
 
       <div class="field">
-        <label for="fraisTransport">Frais transport (heures)</label>
-        <input type="number" id="fraisTransport" value="1" step="0.25">
+        <label for="transport">Frais transport (heures)</label>
+        <input type="number" id="transport" value="1" step="0.25">
       </div>
 
       <div class="field">
-        <label for="minimumHeures">Minimum heures</label>
-        <input type="number" id="minimumHeures" value="3" step="0.25">
+        <label for="minimum">Minimum heures</label>
+        <input type="number" id="minimum" value="3" step="0.25">
       </div>
 
       <div class="field">
@@ -198,22 +190,14 @@
       </div>
 
       <div class="field">
-        <label for="nbKm">Nombre de km</label>
-        <input type="number" id="nbKm" value="0" step="0.01">
-      </div>
-
-      <div class="field">
-        <label for="activerTaxes">Taxes</label>
-        <select id="activerTaxes">
-          <option value="oui" selected>Oui</option>
-          <option value="non">Non</option>
-        </select>
+        <label for="km">Nombre de km</label>
+        <input type="number" id="km" value="0" step="0.01">
       </div>
     </div>
 
     <h2>Matériel</h2>
 
-    <table id="tableMateriel">
+    <table id="table">
       <thead>
         <tr>
           <th>Item</th>
@@ -226,183 +210,147 @@
     </table>
 
     <div class="actions">
-      <button class="btn-red" onclick="calculer()">Calculer</button>
-      <button class="btn-blue" onclick="resetForm()">Reset</button>
+      <button onclick="calcul()">Calculer</button>
+      <button class="secondary" onclick="resetForm()">Reset</button>
     </div>
 
     <div class="results">
-      <div><span>Main-d’œuvre</span><span id="mainOeuvre">0,00 $</span></div>
-      <div><span>Matériel</span><span id="materielTotal">0,00 $</span></div>
-      <div><span>KM</span><span id="kmTotal">0,00 $</span></div>
-      <div><span>Sous-total</span><span id="sousTotal">0,00 $</span></div>
+      <div><span>Main-d’œuvre</span><span id="main">0,00 $</span></div>
+      <div><span>Matériel</span><span id="mat">0,00 $</span></div>
+      <div><span>KM</span><span id="kmAff">0,00 $</span></div>
+      <div><span>Sous-total</span><span id="sub">0,00 $</span></div>
       <div><span>TPS</span><span id="tps">0,00 $</span></div>
       <div><span>TVQ</span><span id="tvq">0,00 $</span></div>
-      <div><span>Total</span><span id="total">0,00 $</span></div>
-      <div><span>Dépôt</span><span id="depotAffiche">0,00 $</span></div>
-      <div class="grand-total"><span>GRAND TOTAL</span><span id="grandTotal">0,00 $</span></div>
+      <div><span>Total</span><span id="tot">0,00 $</span></div>
+      <div><span>Dépôt</span><span id="dep">0,00 $</span></div>
+      <div class="total"><span>GRAND TOTAL</span><span id="grand">0,00 $</span></div>
     </div>
   </div>
 
   <script>
-    const materiels = [
-      { nom: 'Ruban plastique adhésif 2 pouces (TAPE)', prix: 2.50 },
-      { nom: 'Housse (sac de plastique) à matelas 39" (simple)', prix: 6.00 },
-      { nom: 'Housse (sac de plastique) à matelas 60" (queen)', prix: 8.00 },
-      { nom: 'Housse (sac de plastique) à matelas 70" (king)', prix: 11.00 },
-      { nom: 'Boîte 1,5 pieds cubes', prix: 2.25 },
-      { nom: 'Boîte 2 pieds cubes (18 po X 15 po X 12-1/2 po)', prix: 2.75 },
-      { nom: 'Boîte 4 pieds cubes (18 1/4 po X 18 1/4 po X 21 po)', prix: 4.50 },
-      { nom: 'Boîte 5 pieds cubes (18 po X 18 po X 27 po)', prix: 5.50 },
-      { nom: 'Boîte à vaisselle (18 po X 18 po X 28 po)', prix: 7.00 },
-      { nom: 'Boîte abat-jour (22 po X 22 po X 18 po)', prix: 7.50 },
-      { nom: 'Boîte garde-robes 24 po X 21 po X 40 po (inclus la barre)', prix: 18.50 },
-      { nom: 'GARDE-ROBES NO CHARGE', prix: 0.00 },
-      { nom: 'Boîte pour miroir / cadre (Inner) 41 po X 4 po X 30 po', prix: 7.50 },
-      { nom: 'Boîte pour miroir / cadre (Outer) 42 po X 4 po X 34 po', prix: 8.50 },
-      { nom: 'Rouleau papier bulles 1/2" x 48" (haut) x 5\' (longueur)', prix: 8.50 },
-      { nom: 'Rouleau papier bulles 3,16" x 48" (haut) x 10\' (longueur)', prix: 8.50 },
-      { nom: "Papier d'emballage 10 livres", prix: 15.00 },
-      { nom: "Papier d'emballage 25 livres", prix: 27.50 },
-      { nom: 'Couverture matelassé (70 po X 78 po)', prix: 25.00 },
-      { nom: 'Couverture matelassé (usagée)', prix: 15.00 },
-      { nom: 'Garde-Robes usagée', prix: 18.50 }
+    const items = [
+      { n: 'Ruban plastique adhésif 2 pouces (TAPE)', p: 2.50 },
+      { n: 'Housse (sac de plastique) à matelas 39" (simple)', p: 6.00 },
+      { n: 'Housse (sac de plastique) à matelas 60" (queen)', p: 8.00 },
+      { n: 'Housse (sac de plastique) à matelas 70" (king)', p: 11.00 },
+      { n: 'Boîte 1,5 pieds cubes', p: 2.25 },
+      { n: 'Boîte 2 pieds cubes (18 po X 15 po X 12-1/2 po)', p: 2.75 },
+      { n: 'Boîte 4 pieds cubes (18 1/4 po X 18 1/4 po X 21 po)', p: 4.50 },
+      { n: 'Boîte 5 pieds cubes (18 po X 18 po X 27 po)', p: 5.50 },
+      { n: 'Boîte à vaisselle (18 po X 18 po X 28 po)', p: 7.00 },
+      { n: 'Boîte abat-jour (22 po X 22 po X 18 po)', p: 7.50 },
+      { n: 'Boîte garde-robes 24 po X 21 po X 40 po (inclus la barre)', p: 18.50 },
+      { n: 'GARDE-ROBES NO CHARGE', p: 0.00 },
+      { n: 'Boîte pour miroir / cadre (Inner) 41 po X 4 po X 30 po', p: 7.50 },
+      { n: 'Boîte pour miroir / cadre (Outer) 42 po X 4 po X 34 po', p: 8.50 },
+      { n: 'Rouleau papier bulles 1/2" x 48" (haut) x 5\' (longueur)', p: 8.50 },
+      { n: 'Rouleau papier bulles 3,16" x 48" (haut) x 10\' (longueur)', p: 8.50 },
+      { n: "Papier d'emballage 10 livres", p: 15.00 },
+      { n: "Papier d'emballage 25 livres", p: 27.50 },
+      { n: 'Couverture matelassé (70 po X 78 po)', p: 25.00 },
+      { n: 'Couverture matelassé (usagée)', p: 15.00 },
+      { n: 'Garde-Robes usagée', p: 18.50 }
     ];
 
-    function formatArgent(valeur) {
-      return valeur.toLocaleString('fr-CA', {
+    function argent(v) {
+      return v.toLocaleString('fr-CA', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }) + ' $';
     }
 
-    function arrondirQuartHeure(valeur) {
-      return Math.ceil(valeur * 4) / 4;
-    }
-
-    function chargerMateriel() {
-      const tbody = document.querySelector('#tableMateriel tbody');
-      tbody.innerHTML = '';
-
-      materiels.forEach((item, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${item.nom}</td>
-          <td class="right">${formatArgent(item.prix)}</td>
-          <td class="center">
-            <input
-              class="qty-input"
-              type="number"
-              min="0"
-              step="1"
-              value="0"
-              id="qte-${index}"
-              onchange="mettreAJourLigne(${index})"
-            >
-          </td>
-          <td class="right" id="ligne-total-${index}">0,00 $</td>
+    function build() {
+      let t = '';
+      items.forEach((i, x) => {
+        t += `
+          <tr>
+            <td>${i.n}</td>
+            <td class="right">${argent(i.p)}</td>
+            <td class="center">
+              <input class="qty-input" type="number" id="q${x}" value="0" min="0" step="1" onchange="calcul()">
+            </td>
+            <td class="right" id="t${x}">0,00 $</td>
+          </tr>
         `;
-        tbody.appendChild(tr);
       });
+      document.querySelector('#table tbody').innerHTML = t;
     }
 
-    function mettreAJourLigne(index) {
-      const qte = parseFloat(document.getElementById(`qte-${index}`).value) || 0;
-      const total = materiels[index].prix * qte;
-      document.getElementById(`ligne-total-${index}`).textContent = formatArgent(total);
-      calculer();
+    function heures() {
+      const a = document.getElementById('arrivee').value;
+      const d = document.getElementById('depart').value;
+      if (!a || !d) return 0;
+
+      const [h1, m1] = a.split(':').map(Number);
+      const [h2, m2] = d.split(':').map(Number);
+
+      let t1 = h1 * 60 + m1;
+      let t2 = h2 * 60 + m2;
+
+      if (t2 < t1) t2 += 1440;
+
+      return (t2 - t1) / 60;
     }
 
-    function calculerHeures() {
-      const arrivee = document.getElementById('heureArrivee').value;
-      const depart = document.getElementById('heureDepart').value;
-
-      if (!arrivee || !depart) return 0;
-
-      const [h1, m1] = arrivee.split(':').map(Number);
-      const [h2, m2] = depart.split(':').map(Number);
-
-      let debut = h1 * 60 + m1;
-      let fin = h2 * 60 + m2;
-
-      if (fin < debut) fin += 24 * 60;
-
-      return (fin - debut) / 60;
-    }
-
-    function calculerMateriel() {
-      let total = 0;
-
-      materiels.forEach((item, index) => {
-        const qte = parseFloat(document.getElementById(`qte-${index}`).value) || 0;
-        total += item.prix * qte;
-      });
-
-      return total;
-    }
-
-    function calculer() {
-      const tauxHoraire = parseFloat(document.getElementById('tauxHoraire').value) || 0;
-      const fraisTransport = parseFloat(document.getElementById('fraisTransport').value) || 0;
-      const minimumHeures = parseFloat(document.getElementById('minimumHeures').value) || 0;
+    function calcul() {
+      const taux = parseFloat(document.getElementById('taux').value) || 0;
+      const minimum = parseFloat(document.getElementById('minimum').value) || 0;
+      const transport = parseFloat(document.getElementById('transport').value) || 0;
       const depot = parseFloat(document.getElementById('depot').value) || 0;
-      const nbKm = parseFloat(document.getElementById('nbKm').value) || 0;
-      const taxesActives = document.getElementById('activerTaxes').value === 'oui';
+      const km = parseFloat(document.getElementById('km').value) || 0;
 
-      let heures = calculerHeures();
-      heures = arrondirQuartHeure(heures);
+      let h = heures();
+      h = Math.ceil(h * 4) / 4;
 
-      if (heures < minimumHeures) {
-        heures = minimumHeures;
-      }
+      if (h < minimum) h = minimum;
 
-      const totalMainOeuvre = (heures + fraisTransport) * tauxHoraire;
-      const totalMateriel = calculerMateriel();
-      const totalKm = (nbKm * 0.75) * 2;
-      const sousTotal = totalMainOeuvre + totalMateriel + totalKm;
+      const totalH = (h + transport) * taux;
 
-      let tps = 0;
-      let tvq = 0;
-      let total = sousTotal;
+      let mat = 0;
+      items.forEach((i, x) => {
+        const q = parseFloat(document.getElementById('q' + x).value) || 0;
+        const totalLigne = i.p * q;
+        mat += totalLigne;
+        document.getElementById('t' + x).innerText = argent(totalLigne);
+      });
 
-      if (taxesActives) {
-        tps = sousTotal * 0.05;
-        tvq = sousTotal * 0.09975;
-        total = sousTotal + tps + tvq;
-      }
+      const totalKM = (km * 0.75) * 2;
+      const sousTotal = totalH + mat + totalKM;
+      const tps = sousTotal * 0.05;
+      const tvq = sousTotal * 0.09975;
+      const total = sousTotal + tps + tvq;
+      const grand = Math.max(0, total - depot);
 
-      const grandTotal = Math.max(0, total - depot);
-
-      document.getElementById('mainOeuvre').textContent = formatArgent(totalMainOeuvre);
-      document.getElementById('materielTotal').textContent = formatArgent(totalMateriel);
-      document.getElementById('kmTotal').textContent = formatArgent(totalKm);
-      document.getElementById('sousTotal').textContent = formatArgent(sousTotal);
-      document.getElementById('tps').textContent = formatArgent(tps);
-      document.getElementById('tvq').textContent = formatArgent(tvq);
-      document.getElementById('total').textContent = formatArgent(total);
-      document.getElementById('depotAffiche').textContent = '- ' + formatArgent(depot);
-      document.getElementById('grandTotal').textContent = formatArgent(grandTotal);
+      document.getElementById('main').innerText = argent(totalH);
+      document.getElementById('mat').innerText = argent(mat);
+      document.getElementById('kmAff').innerText = argent(totalKM);
+      document.getElementById('sub').innerText = argent(sousTotal);
+      document.getElementById('tps').innerText = argent(tps);
+      document.getElementById('tvq').innerText = argent(tvq);
+      document.getElementById('tot').innerText = argent(total);
+      document.getElementById('dep').innerText = '- ' + argent(depot);
+      document.getElementById('grand').innerText = argent(grand);
     }
 
     function resetForm() {
-      document.getElementById('tauxHoraire').value = 165;
-      document.getElementById('heureArrivee').value = '';
-      document.getElementById('heureDepart').value = '';
-      document.getElementById('fraisTransport').value = 1;
-      document.getElementById('minimumHeures').value = 3;
+      document.getElementById('taux').value = 165;
+      document.getElementById('arrivee').value = '';
+      document.getElementById('depart').value = '';
+      document.getElementById('transport').value = 1;
+      document.getElementById('minimum').value = 3;
       document.getElementById('depot').value = 250;
-      document.getElementById('nbKm').value = 0;
-      document.getElementById('activerTaxes').value = 'oui';
+      document.getElementById('km').value = 0;
 
-      materiels.forEach((_, index) => {
-        document.getElementById(`qte-${index}`).value = 0;
-        document.getElementById(`ligne-total-${index}`).textContent = '0,00 $';
+      items.forEach((_, x) => {
+        document.getElementById('q' + x).value = 0;
+        document.getElementById('t' + x).innerText = '0,00 $';
       });
 
-      calculer();
+      calcul();
     }
 
-    chargerMateriel();
-    calculer();
+    build();
+    calcul();
   </script>
 </body>
-</html
+</html>
