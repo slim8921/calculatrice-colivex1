@@ -1,272 +1,483 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculatrice Colivex</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculatrice Colivex</title>
+  <style>
+    :root {
+      --colivex-red: #c40000;
+      --colivex-blue: #0b4ea2;
+      --colivex-light-blue: #d9ecff;
+      --colivex-bg: #f4f7fb;
+      --border: #0b4ea2;
+    }
 
-<style>
-body {
-  font-family: Arial;
-  background: #f4f7fb;
-  margin: 0;
-  padding: 20px;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.container {
-  max-width: 1000px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  border-top: 8px solid #c40000;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--colivex-bg);
+      margin: 0;
+      padding: 16px;
+      color: #111;
+    }
 
-h1 {
-  text-align: center;
-  color: #c40000;
-}
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      border: 3px solid var(--colivex-blue);
+      border-top: 10px solid var(--colivex-red);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
 
-h2 {
-  color: #0b4ea2;
-}
+    h1 {
+      text-align: center;
+      color: var(--colivex-red);
+      margin: 0 0 18px 0;
+      font-size: 32px;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-  gap: 10px;
-}
+    h2 {
+      color: var(--colivex-blue);
+      margin: 22px 0 10px 0;
+      font-size: 22px;
+    }
 
-input, select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
 
-button {
-  background: #c40000;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
 
-.secondary {
-  background: #0b4ea2;
-}
+    .field label {
+      color: var(--colivex-blue);
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--colivex-blue);
+      border-radius: 10px;
+      font-size: 16px;
+      background: #fff;
+    }
 
-th, td {
-  border: 1px solid black;
-  padding: 8px;
-}
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--colivex-red);
+    }
 
-th {
-  background: #0b4ea2;
-  color: white;
-}
+    .material-add {
+      display: grid;
+      grid-template-columns: 1.8fr 0.8fr 0.8fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
 
-.results {
-  margin-top: 20px;
-  padding: 15px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-}
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+    }
 
-.results div {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px 0;
-}
+    .btn-red {
+      background: var(--colivex-red);
+    }
 
-.total {
-  font-size: 22px;
-  color: #c40000;
-  font-weight: bold;
-}
-</style>
+    .btn-blue {
+      background: var(--colivex-blue);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 2px solid var(--border);
+      padding: 10px 8px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: var(--colivex-blue);
+      color: white;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f7fbff;
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .remove-btn {
+      background: var(--colivex-red);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      width: auto;
+    }
+
+    .results {
+      margin-top: 22px;
+      border: 3px solid var(--colivex-blue);
+      border-radius: 14px;
+      padding: 16px;
+      background: linear-gradient(to bottom, #ffffff, #f7fbff);
+    }
+
+    .results div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 0;
+      font-size: 18px;
+    }
+
+    .grand-total {
+      border-top: 3px solid var(--colivex-red);
+      padding-top: 12px;
+      margin-top: 12px;
+      color: var(--colivex-red);
+      font-weight: bold;
+      font-size: 24px !important;
+    }
+
+    .small-note {
+      color: #666;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 700px) {
+      .material-add {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      th, td {
+        font-size: 14px;
+        padding: 8px 6px;
+      }
+
+      .results div {
+        font-size: 16px;
+      }
+
+      .grand-total {
+        font-size: 20px !important;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <h1>Calculatrice Colivex</h1>
 
-<div class="container">
-<h1>Calculatrice Colivex</h1>
+    <div class="grid">
+      <div class="field">
+        <label for="taux">Taux horaire ($)</label>
+        <input type="number" id="taux" value="165" step="0.01">
+      </div>
 
-<div class="grid">
-<input type="number" id="taux" value="165">
-<input type="time" id="arrivee">
-<input type="time" id="depart">
-<input type="number" id="transport" value="1">
-<input type="number" id="minimum" value="3">
-<input type="number" id="depot" value="250">
-<input type="number" id="km" placeholder="KM total">
-</div>
+      <div class="field">
+        <label for="arrivee">Heure d’arrivée</label>
+        <input type="time" id="arrivee">
+      </div>
 
-<h2>Matériel</h2>
+      <div class="field">
+        <label for="depart">Heure de départ</label>
+        <input type="time" id="depart">
+      </div>
 
-<div class="grid">
-<select id="materielSelect"></select>
-<input type="number" id="qte" placeholder="Qté">
-<button onclick="ajouterMateriel()">Ajouter</button>
-</div>
+      <div class="field">
+        <label for="transport">Frais transport (heures)</label>
+        <input type="number" id="transport" value="1" step="0.25">
+      </div>
 
-<table id="table">
-<thead>
-<tr>
-<th>Item</th>
-<th>Prix</th>
-<th>Qté</th>
-<th>Total</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
+      <div class="field">
+        <label for="minimum">Minimum heures</label>
+        <input type="number" id="minimum" value="3" step="0.25">
+      </div>
 
-<br>
-<button onclick="calcul()">Calculer</button>
-<button class="secondary" onclick="reset()">Reset</button>
+      <div class="field">
+        <label for="depot">Dépôt ($)</label>
+        <input type="number" id="depot" value="250" step="0.01">
+      </div>
 
-<div class="results">
-<div><span>Main-d’œuvre</span><span id="main">0$</span></div>
-<div><span>Matériel</span><span id="mat">0$</span></div>
-<div><span>KM</span><span id="kmAff">0$</span></div>
-<div><span>Sous-total</span><span id="sub">0$</span></div>
-<div><span>TPS</span><span id="tps">0$</span></div>
-<div><span>TVQ</span><span id="tvq">0$</span></div>
-<div><span>Total</span><span id="tot">0$</span></div>
-<div><span>Dépôt</span><span id="dep">0$</span></div>
-<div class="total"><span>GRAND TOTAL</span><span id="grand">0$</span></div>
-</div>
+      <div class="field">
+        <label for="km">Nombre de km</label>
+        <input type="number" id="km" value="0" step="0.01">
+      </div>
+    </div>
 
-</div>
+    <h2>Matériel</h2>
 
-<script>
+    <div class="material-add">
+      <select id="materielSelect"></select>
+      <input type="number" id="qteMateriel" min="1" step="1" value="1" placeholder="Qté">
+      <button class="btn-red" onclick="ajouterMateriel()">Ajouter</button>
+    </div>
 
-const items = [
-{n:'Tape',p:2.5},
-{n:'Housse matelas simple',p:6},
-{n:'Housse queen',p:8},
-{n:'Housse king',p:11},
-{n:'Boite 2pc',p:2.75},
-{n:'Boite 4pc',p:4.5},
-{n:'Boite 5pc',p:5.5},
-{n:'Boite vaisselle',p:7},
-{n:'Garde-robe',p:18.5},
-{n:'Papier bulles',p:8.5},
-{n:'Papier 25lb',p:27.5},
-{n:'Couverture',p:25}
-];
+    <table id="tableMateriel">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Prix</th>
+          <th>Qté</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-let panier = [];
+    <div class="actions">
+      <button class="btn-red" onclick="calculer()">Calculer</button>
+      <button class="btn-blue" onclick="resetForm()">Reset</button>
+    </div>
 
-function initSelect(){
-let s=document.getElementById('materielSelect');
-items.forEach((i,x)=>{
-let opt=document.createElement('option');
-opt.value=x;
-opt.text=i.n+' - '+i.p+'$';
-s.appendChild(opt);
-});
-}
+    <div class="results">
+      <div><span>Main-d’œuvre</span><span id="main">0,00 $</span></div>
+      <div><span>Matériel</span><span id="mat">0,00 $</span></div>
+      <div><span>KM</span><span id="kmAff">0,00 $</span></div>
+      <div><span>Sous-total</span><span id="sub">0,00 $</span></div>
+      <div><span>TPS</span><span id="tps">0,00 $</span></div>
+      <div><span>TVQ</span><span id="tvq">0,00 $</span></div>
+      <div><span>Total</span><span id="tot">0,00 $</span></div>
+      <div><span>Dépôt</span><span id="dep">- 0,00 $</span></div>
+      <div class="grand-total"><span>GRAND TOTAL</span><span id="grand">0,00 $</span></div>
+      <div class="small-note">KM calculé avec la formule : (nb km × 0,75) × 2</div>
+    </div>
+  </div>
 
-function ajouterMateriel(){
-let index=document.getElementById('materielSelect').value;
-let q=+document.getElementById('qte').value || 1;
+  <script>
+    const items = [
+      { n: 'Ruban plastique adhésif 2 pouces (TAPE)', p: 2.50 },
+      { n: 'Housse (sac de plastique) à matelas 39" (simple)', p: 6.00 },
+      { n: 'Housse (sac de plastique) à matelas 60" (queen)', p: 8.00 },
+      { n: 'Housse (sac de plastique) à matelas 70" (king)', p: 11.00 },
+      { n: 'Boîte 1,5 pieds cubes', p: 2.25 },
+      { n: 'Boîte 2 pieds cubes (18 po X 15 po X 12-1/2 po)', p: 2.75 },
+      { n: 'Boîte 4 pieds cubes (18 1/4 po X 18 1/4 po X 21 po)', p: 4.50 },
+      { n: 'Boîte 5 pieds cubes (18 po X 18 po X 27 po)', p: 5.50 },
+      { n: 'Boîte à vaisselle (18 po X 18 po X 28 po)', p: 7.00 },
+      { n: 'Boîte abat-jour (22 po X 22 po X 18 po)', p: 7.50 },
+      { n: 'Boîte garde-robes 24 po X 21 po X 40 po (inclus la barre)', p: 18.50 },
+      { n: 'GARDE-ROBES NO CHARGE', p: 0.00 },
+      { n: 'Boîte pour miroir / cadre (Inner) 41 po X 4 po X 30 po', p: 7.50 },
+      { n: 'Boîte pour miroir / cadre (Outer) 42 po X 4 po X 34 po', p: 8.50 },
+      { n: 'Rouleau papier bulles 1/2" x 48" (haut) x 5\' (longueur)', p: 8.50 },
+      { n: 'Rouleau papier bulles 3,16" x 48" (haut) x 10\' (longueur)', p: 8.50 },
+      { n: "Papier d'emballage 10 livres", p: 15.00 },
+      { n: "Papier d'emballage 25 livres", p: 27.50 },
+      { n: 'Couverture matelassé (70 po X 78 po)', p: 25.00 },
+      { n: 'Couverture matelassé (usagée)', p: 15.00 },
+      { n: 'Garde-Robes usagée', p: 18.50 }
+    ];
 
-panier.push({...items[index], q});
+    let panier = [];
 
-renderTable();
-calcul();
-}
+    function argent(v) {
+      return (Number(v) || 0).toLocaleString('fr-CA', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + ' $';
+    }
 
-function renderTable(){
-let t='';
-panier.forEach((i)=>{
-let total=i.p*i.q;
-t+=`
-<tr>
-<td>${i.n}</td>
-<td>${i.p}$</td>
-<td>${i.q}</td>
-<td>${total.toFixed(2)}$</td>
-</tr>`;
-});
-document.querySelector('#table tbody').innerHTML=t;
-}
+    function remplirSelect() {
+      const select = document.getElementById('materielSelect');
+      select.innerHTML = '';
 
-function argent(v){return v.toFixed(2)+' $';}
+      items.forEach((item, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${item.n} - ${argent(item.p)}`;
+        select.appendChild(option);
+      });
+    }
 
-function heures(){
-let a=arrivee.value;
-let d=depart.value;
-if(!a||!d)return 0;
+    function ajouterMateriel() {
+      const index = parseInt(document.getElementById('materielSelect').value, 10);
+      const qte = parseInt(document.getElementById('qteMateriel').value, 10) || 1;
+      const item = items[index];
 
-let [h1,m1]=a.split(':');
-let [h2,m2]=d.split(':');
+      const existant = panier.find(x => x.n === item.n);
 
-let t1=+h1*60+ +m1;
-let t2=+h2*60+ +m2;
+      if (existant) {
+        existant.q += qte;
+      } else {
+        panier.push({
+          n: item.n,
+          p: item.p,
+          q: qte
+        });
+      }
 
-if(t2<t1)t2+=1440;
+      document.getElementById('qteMateriel').value = 1;
+      renderTable();
+      calculer();
+    }
 
-return (t2-t1)/60;
-}
+    function supprimerMateriel(index) {
+      panier.splice(index, 1);
+      renderTable();
+      calculer();
+    }
 
-function calcul(){
+    function changerQte(index, valeur) {
+      const qte = parseInt(valeur, 10) || 0;
 
-let taux=+taux.value;
-let h=heures();
+      if (qte <= 0) {
+        panier.splice(index, 1);
+      } else {
+        panier[index].q = qte;
+      }
 
-h=Math.ceil(h*4)/4;
+      renderTable();
+      calculer();
+    }
 
-let min=+minimum.value;
-if(h<min)h=min;
+    function renderTable() {
+      const tbody = document.querySelector('#tableMateriel tbody');
+      tbody.innerHTML = '';
 
-let transport=+document.getElementById('transport').value;
-let totalH=(h+transport)*taux;
+      panier.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        const totalLigne = item.p * item.q;
 
-let mat=0;
-panier.forEach(i=> mat+=i.p*i.q);
+        tr.innerHTML = `
+          <td>${item.n}</td>
+          <td class="right">${argent(item.p)}</td>
+          <td class="center">
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value="${item.q}"
+              onchange="changerQte(${index}, this.value)"
+              style="width:90px; text-align:center; border:2px solid #0b4ea2; border-radius:10px; padding:10px;"
+            >
+          </td>
+          <td class="right">${argent(totalLigne)}</td>
+          <td class="center">
+            <button class="remove-btn" onclick="supprimerMateriel(${index})">Supprimer</button>
+          </td>
+        `;
 
-let km=+document.getElementById('km').value||0;
-let totalKM=km*0.75*2;
+        tbody.appendChild(tr);
+      });
+    }
 
-let sub=totalH+mat+totalKM;
+    function heuresTravaillees() {
+      const arrivee = document.getElementById('arrivee').value;
+      const depart = document.getElementById('depart').value;
 
-let tps=sub*0.05;
-let tvq=sub*0.09975;
+      if (!arrivee || !depart) return 0;
 
-let total=sub+tps+tvq;
+      const [h1, m1] = arrivee.split(':').map(Number);
+      const [h2, m2] = depart.split(':').map(Number);
 
-let depot=+document.getElementById('depot').value;
+      let debut = h1 * 60 + m1;
+      let fin = h2 * 60 + m2;
 
-let grand=total-depot;
+      if (fin < debut) fin += 1440;
 
-main.innerText=argent(totalH);
-mat.innerText=argent(mat);
-kmAff.innerText=argent(totalKM);
-sub.innerText=argent(sub);
-tps.innerText=argent(tps);
-tvq.innerText=argent(tvq);
-tot.innerText=argent(total);
-dep.innerText='- '+argent(depot);
-grand.innerText=argent(grand);
-}
+      return (fin - debut) / 60;
+    }
 
-function reset(){location.reload();}
+    function totalMateriel() {
+      return panier.reduce((sum, item) => sum + (item.p * item.q), 0);
+    }
 
-initSelect();
+    function calculer() {
+      const taux = parseFloat(document.getElementById('taux').value) || 0;
+      const transport = parseFloat(document.getElementById('transport').value) || 0;
+      const minimum = parseFloat(document.getElementById('minimum').value) || 0;
+      const depot = parseFloat(document.getElementById('depot').value) || 0;
+      const km = parseFloat(document.getElementById('km').value) || 0;
 
-</script>
+      let h = heuresTravaillees();
+      h = Math.ceil(h * 4) / 4;
 
+      if (h < minimum) h = minimum;
+
+      const mainOeuvre = (h + transport) * taux;
+      const materiel = totalMateriel();
+      const totalKM = (km * 0.75) * 2;
+      const sousTotal = mainOeuvre + materiel + totalKM;
+      const tps = sousTotal * 0.05;
+      const tvq = sousTotal * 0.09975;
+      const total = sousTotal + tps + tvq;
+      const grand = Math.max(0, total - depot);
+
+      document.getElementById('main').textContent = argent(mainOeuvre);
+      document.getElementById('mat').textContent = argent(materiel);
+      document.getElementById('kmAff').textContent = argent(totalKM);
+      document.getElementById('sub').textContent = argent(sousTotal);
+      document.getElementById('tps').textContent = argent(tps);
+      document.getElementById('tvq').textContent = argent(tvq);
+      document.getElementById('tot').textContent = argent(total);
+      document.getElementById('dep').textContent = '- ' + argent(depot);
+      document.getElementById('grand').textContent = argent(grand);
+    }
+
+    function resetForm() {
+      document.getElementById('taux').value = 165;
+      document.getElementById('arrivee').value = '';
+      document.getElementById('depart').value = '';
+      document.getElementById('transport').value = 1;
+      document.getElementById('minimum').value = 3;
+      document.getElementById('depot').value = 250;
+      document.getElementById('km').value = 0;
+      document.getElementById('qteMateriel').value = 1;
+      panier = [];
+      renderTable();
+      calculer();
+    }
+
+    remplirSelect();
+    renderTable();
+    calculer();
+  </script>
 </body>
 </html>
