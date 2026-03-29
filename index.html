@@ -1,311 +1,439 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Calculatrice Transport Colivex</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculatrice Colivex</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f7fb;
+      color: #111;
+    }
 
-<style>
-:root{
-  --red:#D71920;      /* Rouge Colivex */
-  --blue:#1E4FA3;     /* Bleu Colivex */
-  --bg:#F2F4F8;
-  --card:#FFFFFF;
-  --border:#D6DAE1;
-}
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-  background:var(--bg);
-  color:#111;
-}
+    h1, h2 {
+      text-align: center;
+      margin-top: 0;
+    }
 
-.container{
-  max-width:760px;
-  margin:auto;
-  padding:14px;
-}
+    h1 {
+      color: #c40000;
+    }
 
-/* BARRE TITRE – BLEU */
-.topBar{
-  background:var(--blue);
-  color:#fff;
-  font-weight:900;
-  font-size:18px;
-  text-align:center;
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:14px;
-}
+    h2 {
+      margin-top: 30px;
+      color: #0b4ea2;
+      font-size: 22px;
+    }
 
-/* CARTES */
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px;
-  margin-bottom:14px;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
 
-/* TITRES DE SECTIONS */
-.sectionRed{
-  background:var(--red);
-  color:#fff;
-  font-weight:900;
-  padding:10px 12px;
-  border-radius:10px;
-  margin:-14px -14px 14px -14px;
-}
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
 
-.sectionBlue{
-  background:var(--blue);
-  color:#fff;
-  font-weight:900;
-  padding:10px 12px;
-  border-radius:10px;
-  margin:-14px -14px 14px -14px;
-}
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cfcfcf;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
 
-/* FORMULAIRES */
-label{
-  font-weight:800;
-  font-size:14px;
-  display:block;
-  margin-top:10px;
-}
-input, select, button{
-  width:100%;
-  padding:12px;
-  margin-top:6px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  font-size:16px;
-  background:#fff;
-}
+    button {
+      background: #c40000;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
 
-/* GRILLE */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-@media(max-width:600px){
-  .grid{grid-template-columns:1fr;}
-}
+    button:hover {
+      opacity: 0.95;
+    }
 
-/* BOUTONS */
-.btnBlue{
-  background:var(--blue);
-  color:#fff;
-  border:none;
-  font-weight:900;
-  border-radius:12px;
-  cursor:pointer;
-}
-.btnRed{
-  background:var(--red);
-  color:#fff;
-  border:none;
-  font-weight:900;
-  font-size:18px;
-  padding:14px;
-  border-radius:14px;
-  cursor:pointer;
-}
+    .secondary-btn {
+      background: #0b4ea2;
+    }
 
-/* EXTRAS */
-.extraItem{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px;
-  margin-top:8px;
-}
-.removeBtn{
-  width:40px;
-  height:40px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-size:18px;
-  cursor:pointer;
-  color:var(--red);
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      overflow: hidden;
+      border-radius: 10px;
+    }
 
-/* RÉSUMÉ */
-.summaryBox{
-  border:2px solid var(--blue);
-  border-radius:14px;
-  padding:14px;
-}
-.summaryRow{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px solid var(--border);
-}
-.summaryRow:last-child{border-bottom:none;}
-.totalBig{
-  font-size:20px;
-  font-weight:900;
-  color:var(--red);
-}
-.grandTotal{
-  font-size:22px;
-  font-weight:900;
-  color:var(--red);
-}
-.small{font-size:13px;color:#555;}
-</style>
+    th, td {
+      border: 1px solid #222;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #cceff1;
+      font-size: 18px;
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .results {
+      margin-top: 30px;
+      background: #f8fafc;
+      border: 2px solid #d9e2ec;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .results div {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 18px;
+    }
+
+    .grand-total {
+      font-size: 24px !important;
+      font-weight: bold;
+      color: #c40000;
+      border-top: 2px solid #ccc;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #555;
+      margin-top: 8px;
+    }
+
+    .row-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .row-btns button {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    @media (max-width: 700px) {
+      table, thead, tbody, th, td, tr {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 8px;
+      }
+
+      .results div {
+        font-size: 16px;
+      }
+
+      .grand-total {
+        font-size: 20px !important;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
-
-  <!-- BLEU -->
-  <div class="topBar">Calculatrice Transport Colivex</div>
-
-  <!-- ROUGE -->
-  <div class="card">
-    <div class="sectionRed">Heures de travail</div>
+  <div class="container">
+    <h1>Calculatrice Colivex</h1>
 
     <div class="grid">
       <div>
-        <label>Heure d’arrivée</label>
-        <input id="startTime" type="time">
+        <label for="tauxHoraire">Taux horaire ($)</label>
+        <input type="number" id="tauxHoraire" value="165" step="0.01" />
       </div>
+
       <div>
-        <label>Heure de départ</label>
-        <input id="endTime" type="time">
+        <label for="heureArrivee">Heure d’arrivée</label>
+        <input type="time" id="heureArrivee" />
       </div>
+
       <div>
-        <label>Heures travaillées (auto)</label>
-        <input id="hoursWorked" type="number" readonly>
+        <label for="heureDepart">Heure de départ</label>
+        <input type="time" id="heureDepart" />
       </div>
+
       <div>
-        <label>Tarif horaire ($)</label>
-        <input id="rate" type="number" value="145">
+        <label for="fraisTransport">Frais de transport (heures)</label>
+        <input type="number" id="fraisTransport" value="1" step="0.25" />
       </div>
+
       <div>
-        <label>Frais transport (heures)</label>
-        <input id="transportHours" type="number" value="1" step="0.25">
+        <label for="minimumHeures">Minimum heures de travail</label>
+        <input type="number" id="minimumHeures" value="3" step="0.25" />
       </div>
+
       <div>
-        <label>Dépôt reçu (tx incluses)</label>
-        <input id="deposit" type="number" value="250">
+        <label for="depot">Dépôt ($)</label>
+        <input type="number" id="depot" value="250" step="0.01" />
       </div>
     </div>
-  </div>
-
-  <!-- BLEU -->
-  <div class="card">
-    <div class="sectionBlue">Extras – matériel d’emballage</div>
-
-    <select id="extraSelect">
-      <option value="2.5">Ruban adhésif 2" — 2,50 $</option>
-      <option value="6">Housse matelas 39" — 6,00 $</option>
-      <option value="8">Housse matelas 60" — 8,00 $</option>
-      <option value="11">Housse matelas 70" — 11,00 $</option>
-      <option value="2.25">Boîte 1,5 pi³ — 2,25 $</option>
-      <option value="2.75">Boîte 2 pi³ — 2,75 $</option>
-      <option value="4.5">Boîte 4 pi³ — 4,50 $</option>
-      <option value="5.5">Boîte 5 pi³ — 5,50 $</option>
-      <option value="7">Boîte vaisselle — 7,00 $</option>
-      <option value="18.5">Boîte garde-robe — 18,50 $</option>
-    </select>
 
     <div class="grid">
       <div>
-        <label>Quantité</label>
-        <input id="extraQty" type="number" value="1" min="1">
+        <label for="appliquerMinimum">Appliquer minimum 3h</label>
+        <select id="appliquerMinimum">
+          <option value="oui" selected>Oui</option>
+          <option value="non">Non</option>
+        </select>
       </div>
-      <div style="align-self:end;">
-        <button class="btnBlue" onclick="addExtra()">Ajouter</button>
+
+      <div>
+        <label for="arrondiQuartHeure">Arrondir au 15 min</label>
+        <select id="arrondiQuartHeure">
+          <option value="oui" selected>Oui</option>
+          <option value="non">Non</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="taxesActives">Ajouter TPS + TVQ</label>
+        <select id="taxesActives">
+          <option value="oui" selected>Oui</option>
+          <option value="non">Non</option>
+        </select>
       </div>
     </div>
 
-    <div id="extrasList"></div>
-  </div>
+    <h2>Matériels d'emballage</h2>
 
-  <!-- ROUGE -->
-  <button class="btnRed" onclick="calculate()">Calculer</button>
+    <table id="tableMateriel">
+      <thead>
+        <tr>
+          <th>MATÉRIELS D'EMBALLAGE</th>
+          <th class="right">PRIX</th>
+          <th class="center">QTE</th>
+          <th class="right">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-  <!-- BLEU -->
-  <div class="card" id="resultCard" style="display:none;">
-    <div class="sectionBlue">Résumé</div>
+    <div class="row-btns">
+      <button type="button" onclick="calculerTotal()">Calculer</button>
+      <button type="button" class="secondary-btn" onclick="reinitialiser()">Réinitialiser</button>
+    </div>
 
-    <div class="summaryBox">
-      <div class="summaryRow"><span>Sous-total</span><strong id="subTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>TPS (5 %)</span><strong id="tpsTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>TVQ (9,975 %)</span><strong id="tvqTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>Total taxes incluses</span><strong id="totalTaxesTxt">0,00 $</strong></div>
-      <div class="summaryRow"><span>Dépôt reçu (tx incluses)</span><strong id="depositTxt">- 250,00 $</strong></div>
-      <div class="summaryRow"><span>Grand total à payer</span><strong id="grandTotalTxt" class="grandTotal">0,00 $</strong></div>
+    <div class="results">
+      <div><span>Heures travaillées</span><span id="heuresTravaillees">0.00 h</span></div>
+      <div><span>Heures facturables</span><span id="heuresFacturables">0.00 h</span></div>
+      <div><span>Total main-d’œuvre</span><span id="totalMainOeuvre">0,00 $</span></div>
+      <div><span>Total matériel</span><span id="totalMateriel">0,00 $</span></div>
+      <div><span>Sous-total</span><span id="sousTotal">0,00 $</span></div>
+      <div><span>TPS (5%)</span><span id="tps">0,00 $</span></div>
+      <div><span>TVQ (9.975%)</span><span id="tvq">0,00 $</span></div>
+      <div><span>Total avec taxes</span><span id="totalAvecTaxes">0,00 $</span></div>
+      <div><span>Dépôt</span><span id="depotAffiche">0,00 $</span></div>
+      <div class="grand-total"><span>GRAND TOTAL</span><span id="grandTotal">0,00 $</span></div>
+      <div class="note">Le dépôt est soustrait à la fin du calcul.</div>
     </div>
   </div>
 
-</div>
+  <script>
+    const materielsEmballage = [
+      { nom: 'Ruban plastique adhésif 2 pouces (TAPE)', prix: 2.50 },
+      { nom: 'Housse (sac de plastique) à matelas 39" (simple)', prix: 6.00 },
+      { nom: 'Housse (sac de plastique) à matelas 60" (queen)', prix: 8.00 },
+      { nom: 'Housse (sac de plastique) à matelas 70" (king)', prix: 11.00 },
+      { nom: 'Boîte 1,5 pieds cubes', prix: 2.25 },
+      { nom: 'Boîte 2 pieds cubes (18 po X 15 po X 12-1/2 po)', prix: 2.75 },
+      { nom: 'Boîte 4 pieds cubes (18 1/4 po X 18 1/4 po X 21 po)', prix: 4.50 },
+      { nom: 'Boîte 5 pieds cubes (18 po X 18 po X 27 po)', prix: 5.50 },
+      { nom: 'Boîte à vaisselle (18 po X 18 po X 28 po)', prix: 7.00 },
+      { nom: 'Boîte abat-jour (22 po X 22 po X 18 po)', prix: 7.50 },
+      { nom: 'Boîte garde-robes 24 po X 21 po X 40 po (inclus la barre)', prix: 18.50 },
+      { nom: 'GARDE-ROBES NO CHARGE', prix: 0.00 },
+      { nom: 'Boîte pour miroir / cadre (Inner) 41 po X 4 po X 30 po', prix: 7.50 },
+      { nom: 'Boîte pour miroir / cadre (Outer) 42 po X 4 po X 34 po', prix: 8.50 },
+      { nom: 'Rouleau papier bulles 1/2" x 48" (haut) x 5\' (longueur)', prix: 8.50 },
+      { nom: 'Rouleau papier bulles 3,16" x 48" (haut) x 10\' (longueur)', prix: 8.50 },
+      { nom: "Papier d'emballage 10 livres", prix: 15.00 },
+      { nom: "Papier d'emballage 25 livres", prix: 27.50 },
+      { nom: 'Couverture matelassé (70 po X 78 po)', prix: 25.00 },
+      { nom: 'Couverture matelassé (usagée)', prix: 15.00 },
+      { nom: 'Garde-Robes usagée', prix: 18.50 }
+    ];
 
-<script>
-const TPS=0.05, TVQ=0.09975, cart=[];
-const $=id=>document.getElementById(id);
-const money=v=>(Number(v)||0).toLocaleString("fr-CA",{style:"currency",currency:"CAD"});
+    function argent(valeur) {
+      return valeur.toLocaleString('fr-CA', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + ' $';
+    }
 
-function tmin(t){if(!t)return null;const[a,b]=t.split(":").map(Number);return a*60+b;}
-function updateHours(){
-  const s=tmin(startTime.value), e=tmin(endTime.value);
-  if(s===null||e===null)return;
-  let d=e-s; if(d<0)d+=1440;
-  hoursWorked.value=Math.round((d/60)*100)/100;
-}
+    function arrondirAuQuart(valeur) {
+      return Math.ceil(valeur * 4) / 4;
+    }
 
-function addExtra(){
-  cart.push({name:extraSelect.options[extraSelect.selectedIndex].text,price:+extraSelect.value,qty:+extraQty.value});
-  renderExtras();
-}
-function renderExtras(){
-  extrasList.innerHTML=cart.length?``:`<div class="small">Aucun extra ajouté</div>`;
-  cart.forEach((i,x)=>extrasList.innerHTML+=`<div class="extraItem">${i.qty} × ${i.name}<button class="removeBtn" onclick="cart.splice(${x},1);renderExtras()">✕</button></div>`);
-}
+    function genererTableauMateriel() {
+      const tbody = document.querySelector('#tableMateriel tbody');
+      tbody.innerHTML = '';
 
-function calculate(){
-  updateHours();
+      materielsEmballage.forEach((item, index) => {
+        const tr = document.createElement('tr');
 
-  // Sous-total AVANT taxes (main-d'oeuvre + transport + extras)
-  let sub=(rate.value*hoursWorked.value)+(rate.value*transportHours.value);
-  cart.forEach(i=>sub+=i.price*i.qty);
+        tr.innerHTML = `
+          <td>${item.nom}</td>
+          <td class="right">${argent(item.prix)}</td>
+          <td class="center">
+            <input
+              type="number"
+              min="0"
+              value="0"
+              step="1"
+              style="width:80px; text-align:center;"
+              onchange="mettreAJourLigne(${index})"
+              id="qte-${index}"
+            />
+          </td>
+          <td class="right" id="total-ligne-${index}">0,00 $</td>
+        `;
 
-  // Taxes séparées
-  const tps = sub * TPS;
-  const tvq = sub * TVQ;
+        tbody.appendChild(tr);
+      });
+    }
 
-  // Total taxes incluses
-  const totalTaxes = sub + tps + tvq;
+    function mettreAJourLigne(index) {
+      const qte = parseFloat(document.getElementById(`qte-${index}`).value) || 0;
+      const total = materielsEmballage[index].prix * qte;
+      document.getElementById(`total-ligne-${index}`).textContent = argent(total);
+      calculerTotal();
+    }
 
-  // Dépôt (tx incluses) soustrait APRÈS taxes
-  const dep = Number(deposit.value) || 0;
+    function calculerHeuresTravaillees() {
+      const heureArrivee = document.getElementById('heureArrivee').value;
+      const heureDepart = document.getElementById('heureDepart').value;
 
-  // Grand total
-  const grandTotal = Math.max(0, totalTaxes - dep);
+      if (!heureArrivee || !heureDepart) {
+        return 0;
+      }
 
-  // Affichage
-  subTxt.textContent = money(sub);
-  tpsTxt.textContent = money(tps);
-  tvqTxt.textContent = money(tvq);
-  totalTaxesTxt.textContent = money(totalTaxes);
-  depositTxt.textContent = "- " + money(dep);
-  grandTotalTxt.textContent = money(grandTotal);
+      const [h1, m1] = heureArrivee.split(':').map(Number);
+      const [h2, m2] = heureDepart.split(':').map(Number);
 
-  resultCard.style.display="block";
-}
+      let debut = h1 * 60 + m1;
+      let fin = h2 * 60 + m2;
 
-startTime.oninput=endTime.oninput=updateHours;
-renderExtras();
-</script>
+      if (fin < debut) {
+        fin += 24 * 60;
+      }
 
+      return (fin - debut) / 60;
+    }
+
+    function calculerTotalMateriel() {
+      let total = 0;
+
+      materielsEmballage.forEach((item, index) => {
+        const qte = parseFloat(document.getElementById(`qte-${index}`).value) || 0;
+        total += item.prix * qte;
+      });
+
+      return total;
+    }
+
+    function calculerTotal() {
+      const tauxHoraire = parseFloat(document.getElementById('tauxHoraire').value) || 0;
+      const fraisTransport = parseFloat(document.getElementById('fraisTransport').value) || 0;
+      const minimumHeures = parseFloat(document.getElementById('minimumHeures').value) || 0;
+      const depot = parseFloat(document.getElementById('depot').value) || 0;
+
+      const appliquerMinimum = document.getElementById('appliquerMinimum').value === 'oui';
+      const arrondiQuartHeure = document.getElementById('arrondiQuartHeure').value === 'oui';
+      const taxesActives = document.getElementById('taxesActives').value === 'oui';
+
+      let heuresTravaillees = calculerHeuresTravaillees();
+
+      if (arrondiQuartHeure) {
+        heuresTravaillees = arrondirAuQuart(heuresTravaillees);
+      }
+
+      let heuresFacturables = heuresTravaillees;
+
+      if (appliquerMinimum && heuresFacturables < minimumHeures) {
+        heuresFacturables = minimumHeures;
+      }
+
+      const heuresTotalesFacturees = heuresFacturables + fraisTransport;
+      const totalMainOeuvre = tauxHoraire * heuresTotalesFacturees;
+      const totalMateriel = calculerTotalMateriel();
+      const sousTotal = totalMainOeuvre + totalMateriel;
+
+      let tps = 0;
+      let tvq = 0;
+      let totalAvecTaxes = sousTotal;
+
+      if (taxesActives) {
+        tps = sousTotal * 0.05;
+        tvq = sousTotal * 0.09975;
+        totalAvecTaxes = sousTotal + tps + tvq;
+      }
+
+      const grandTotal = Math.max(0, totalAvecTaxes - depot);
+
+      document.getElementById('heuresTravaillees').textContent = heuresTravaillees.toFixed(2) + ' h';
+      document.getElementById('heuresFacturables').textContent = heuresTotalesFacturees.toFixed(2) + ' h';
+      document.getElementById('totalMainOeuvre').textContent = argent(totalMainOeuvre);
+      document.getElementById('totalMateriel').textContent = argent(totalMateriel);
+      document.getElementById('sousTotal').textContent = argent(sousTotal);
+      document.getElementById('tps').textContent = argent(tps);
+      document.getElementById('tvq').textContent = argent(tvq);
+      document.getElementById('totalAvecTaxes').textContent = argent(totalAvecTaxes);
+      document.getElementById('depotAffiche').textContent = '- ' + argent(depot);
+      document.getElementById('grandTotal').textContent = argent(grandTotal);
+    }
+
+    function reinitialiser() {
+      document.getElementById('tauxHoraire').value = 165;
+      document.getElementById('heureArrivee').value = '';
+      document.getElementById('heureDepart').value = '';
+      document.getElementById('fraisTransport').value = 1;
+      document.getElementById('minimumHeures').value = 3;
+      document.getElementById('depot').value = 250;
+      document.getElementById('appliquerMinimum').value = 'oui';
+      document.getElementById('arrondiQuartHeure').value = 'oui';
+      document.getElementById('taxesActives').value = 'oui';
+
+      materielsEmballage.forEach((item, index) => {
+        document.getElementById(`qte-${index}`).value = 0;
+        document.getElementById(`total-ligne-${index}`).textContent = argent(0);
+      });
+
+      calculerTotal();
+    }
+
+    genererTableauMateriel();
+    calculerTotal();
+  </script>
 </body>
 </html>
